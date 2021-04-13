@@ -1,5 +1,5 @@
 NAME = ft_nm
-CC = gcc
+CC = cc
 CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -Werror
@@ -19,7 +19,7 @@ end=$ \033[0m
 
 #-----------------------------------------SRC/INC-------------------------------#
 
-FT_NM_FILES 	= main \
+FT_NM_FILES 	= main 
 
 INC_FILES 	= ft_nm.h
 LIB_BIN 	= libft.a
@@ -43,10 +43,9 @@ LIB = $(addprefix $(LIB_PATH), $(LIB_BIN))
 
 #------------------------------------------RULES--------------------------------#
 
-.PHONY: clean, fclean, all, re, lib, ft_nm, norm
+.PHONY: clean, fclean, all, re, lib, norm
 
 all: $(NAME)
-ft_nm: $(NAME)
 
 lib: $(LIB)
 
@@ -60,7 +59,7 @@ $(OBJ_PATH):
 	@mkdir $(OBJ_PATH)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	@$(CC) $(CFLAGS) -c -I $(INC_PATH) -I $(LIB) $< -o $@
+	$(CC) $(CFLAGS) -c -I $(INC_PATH) -I $(LIB) $< -o $@
 	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
 
 $(LIB): $(OBJ_LIB)
