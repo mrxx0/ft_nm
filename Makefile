@@ -80,5 +80,4 @@ fclean: clean
 	@make fclean -C $(LIB_PATH)
 	@echo "$(red_li)$(notdir $(NAME))$(red_da) removed.$(end)"
 
-re: fclean 
-	@make ft_nm
+re: fclean ft_nm
