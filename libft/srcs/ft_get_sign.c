@@ -37,7 +37,7 @@ static int	ft_sign_left(char sign, t_arg *arg)
 	free(arg->print);
 	arg->print = str;
 	arg->print_size = !(ft_strchr(arg->print, ' ')) ?
-		ft_strlen(arg->print) : arg->print_size;
+		(int)ft_strlen(arg->print) : arg->print_size;
 	return (1);
 }
 

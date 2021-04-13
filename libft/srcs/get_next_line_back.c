@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/get_next_line.h"
+#include "../includes/get_next_line.h"
 
 static t_list	*ft_valid_file(t_list **files, const int fd)
 {
@@ -58,9 +58,7 @@ int				get_next_line(const int fd, char **line)
 	static	t_list	*files;
 	char			buff[BUFF_SIZE + 1];
 	int				ret_v;
-	size_t			i;
 
-	i = 0;
 	if (fd < 0 || !line || read(fd, buff, 0) < 0 || BUFF_SIZE <= 0)
 		return (-1);
 	current = ft_valid_file(&files, fd);

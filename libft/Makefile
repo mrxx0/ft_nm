@@ -40,7 +40,7 @@ LIBFT=  ft_abs ft_atoi ft_bzero ft_check_zero_d ft_dis ft_fdtoa ft_float_expo 		
 	get_next_line_back get_next_line 
 
 INC		= ft_printf.h libft.h get_next_line.h
-SRC_FILES	= $(LIBFT:%=%.c) $(PRINTF:%=%.c)
+SRC_FILES	= $(LIBFT:%=%.c)
 
 #-------------------------PATH/OBJ/DEP---------------------------------------------
 
