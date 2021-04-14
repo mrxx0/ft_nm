@@ -47,12 +47,13 @@ typedef struct				s_arg
 	int						flags;
 	int						min_width;
 	int						precision;
-	char					*len;
-	char					arg_type;
-	char					*print;
 	int						print_size;
-	char					*old_print;
 	int						old_print_size;
+	char						arg_type;
+	char						pad[3];
+	char						*print;
+	char						*old_print;
+	char						*len;
 }							t_arg;
 
 typedef union				u_floatbits
