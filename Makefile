@@ -59,7 +59,7 @@ $(OBJ_PATH):
 	@mkdir $(OBJ_PATH)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	$(CC) $(CFLAGS) -c -I $(INC_PATH) -I $(LIB) $< -o $@
+	@$(CC) $(CFLAGS) -c -I $(INC_PATH) -L $(LIB) $< -o $@
 	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
 
 $(LIB): $(OBJ_LIB)
