@@ -3,7 +3,6 @@ CC 	= gcc
 CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -Werror
-
 #-------------------------------------COLOR VARIABLE----------------------------#
 
 red_li=$ \033[1;31m
@@ -39,7 +38,7 @@ LIBFT=  ft_abs ft_atoi ft_bzero ft_check_zero_d ft_dis ft_fdtoa ft_float_expo 		
 	ft_uitoa_base ft_ulitoa_base ft_ullitoa_base ft_unsigned ft_width_float 	\
 	get_next_line_back get_next_line 
 
-INC		= ft_printf.h libft.h get_next_line.h
+INC		= libft.h get_next_line.h ft_printf.h
 SRC_FILES	= $(LIBFT:%=%.c)
 
 #-------------------------PATH/OBJ/DEP---------------------------------------------
