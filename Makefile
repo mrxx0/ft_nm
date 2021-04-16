@@ -1,5 +1,5 @@
 NAME = ft_nm
-CC = cc
+CC = clang
 CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -Werror
@@ -59,7 +59,7 @@ $(OBJ_PATH):
 	@mkdir $(OBJ_PATH)
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	@$(CC) $(CFLAGS) -c -I $(INC_PATH) -L $(LIB) $< -o $@
+	@$(CC) $(CFLAGS) -c -I $(INC_PATH) -I $(LIB) $< -o $@
 	@echo "Compilation of $(whi)$(notdir $<)$(grn_da) done.$(end)"
 
 $(LIB): $(OBJ_LIB)
