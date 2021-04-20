@@ -13,7 +13,6 @@ int main(int argc, char **argv)
 	if (argc > 2 || argc == 1)
 		return (-1);
 	int fd;
-	//struct stat stat = {0};
 	struct stat stat = {0};
 	char *mmap_return;
 	fd = -1;
@@ -60,11 +59,30 @@ int main(int argc, char **argv)
 	
 	ft_printf("\nChecking ELF class...\n");
 	if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS64)
-		ft_printf("%s is a 64 bits ELF\n", argv[1]);
+		ft_printf("\t%s is a 64 bits ELF\n", argv[1]);
 	else if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS32)
-		ft_printf("%s is a 32 bits ELF\n", argv[1]);
+		ft_printf("\t%s is a 32 bits ELF\n", argv[1]);
 	else
-		ft_printf("%s unknown ELF type.\n", argv[1]);
+		ft_printf("\t%s unknown ELF type.\n", argv[1]);
+	
+	ft_printf("\nChecking little-endians or big-endians...\n");
+	if ((unsigned char)mmap_return[EI_DATA] == ELFDATA2LSB)
+	{
+		ft_printf("\t%s is for little-endian\n", argv[1]);
+	}
+	else
+		ft_printf("\t%s is for big-endian\n", argv[1]);
+
+	ft_printf("\nChecking if %s is compiled for Linux...\n", argv[1]);
+	if ((unsigned char)mmap_return[EI_OSABI] == ELFOSABI_LINUX)
+	{
+		ft_printf("\t%s is LINUX binary\n", argv[1]);
+	}
+	else if ((unsigned char)mmap_return[EI_OSABI] == ELFOSABI_SYSV)
+		ft_printf("\t%s is SYSB binary\n", argv[1]);
+	else if ((unsigned char)mmap_return[EI_OSABI] == ELFOSABI_NONE)
+		ft_printf("\t%s is NONE binary\n", argv[1]);
+
 
 	if (fd != -1)
 		close(fd);
