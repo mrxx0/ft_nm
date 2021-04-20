@@ -41,7 +41,31 @@ int main(int argc, char **argv)
 		ft_printf("%s", "ERROR : MAP_FAILED");
 		return (-1);
 	}
+
+	ft_printf("%s is mmaped correctly.\n", argv[1]);
 	
+	ft_printf("Checking if %s is an ELF file...\n\n", argv[1]);
+	ft_printf("EI_MAG0 = %#x\n", (unsigned char)mmap_return[EI_MAG0]);
+	ft_printf("EI_MAG1 = %c\n", (unsigned char)mmap_return[EI_MAG1]);
+	ft_printf("EI_MAG2 = %c\n", (unsigned char)mmap_return[EI_MAG2]);
+	ft_printf("EI_MAG3 = %c\n", (unsigned char)mmap_return[EI_MAG3]);
+	
+	if ((unsigned char)mmap_return[EI_MAG0] == 0x7f &&
+		(unsigned char)mmap_return[EI_MAG1] == 'E' &&	
+		(unsigned char)mmap_return[EI_MAG2] == 'L' &&	
+		(unsigned char)mmap_return[EI_MAG3] == 'F')
+		ft_printf("\n\t%s is an ELF file format.\n", argv[1]);
+	else
+		ft_printf("\n\t%s is not an ELF file format.\n", argv[1]); 
+	
+	ft_printf("\nChecking ELF class...\n");
+	if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS64)
+		ft_printf("%s is a 64 bits ELF\n", argv[1]);
+	else if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS32)
+		ft_printf("%s is a 32 bits ELF\n", argv[1]);
+	else
+		ft_printf("%s unknown ELF type.\n", argv[1]);
+
 	if (fd != -1)
 		close(fd);
 	if (mmap_return != MAP_FAILED)
