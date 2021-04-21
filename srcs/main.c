@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 	else
 		ft_printf("\t%s unknown ELF type.\n", argv[1]);
 	
-	ft_printf("\nChecking little-endians or big-endians...\n");
+	ft_printf("\nChecking %s endian type...\n", argv[1]);
 	if ((unsigned char)mmap_return[EI_DATA] == ELFDATA2LSB)
 	{
 		ft_printf("\t%s is for little-endian\n", argv[1]);
@@ -83,7 +83,10 @@ int main(int argc, char **argv)
 	else if ((unsigned char)mmap_return[EI_OSABI] == ELFOSABI_NONE)
 		ft_printf("\t%s is NONE binary\n", argv[1]);
 
+	ft_printf("Checking entry point for %s...\n", argv[1]);
+	ft_printf("\t%s's entry point is at %lu\n",argv[1], ((Elf64_Ehdr *)mmap_return)->e_entry);
 
+	
 	if (fd != -1)
 		close(fd);
 	if (mmap_return != MAP_FAILED)
