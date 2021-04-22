@@ -9,9 +9,9 @@
 #include <fcntl.h>
 
 #define TEST_HEADER_TYPE(type, value, name)\
-if ((type) == (value)) {\
-	ft_printf("\t%s\n", (name));\
-}
+	if ((type) == (value)) {\
+		ft_printf("\t%s\n", (name));\
+	}
 int main(int argc, char **argv)
 {
 	if (argc > 2 || argc == 1)
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 	ft_printf("Checking entry point for %s...\n", argv[1]);
 	ft_printf("\t%s's entry point is at %lu\n",argv[1], ((Elf64_Ehdr *)mmap_return)->e_entry);
 
-	ft_printf("Checking type of header in %s...\n", argv[1]);
+	ft_printf("Checking type of program headers in %s...\n", argv[1]);
 
 	int i;
 
@@ -123,9 +123,18 @@ int main(int argc, char **argv)
 		TEST_HEADER_TYPE(type, PT_HIPROC, "PT_HIPROC");
 		i++;	
 	}
-
-
-
+	
+	ft_printf("Checking type of section headers in %s...\n", argv[1]);
+	/*Elf64_Ehdr *eh = (Elf64_Ehdr*)mmap_return;
+	i = 0;
+	while (i < eh->e_phnum)
+	{
+		Elf64_Phdr
+	}
+	Elf64_Ehdr *elf_header = (Elf64_Ehdr *)mmap_return;
+	Elf64_Shdr *shstrtab_header = (Elf64_Shdr *)((char *)mmap_return + (eh->e_shoff + eh->e_phentsize * eh->e_shstrndx));
+	const char *shstrtab = (const char *)mmap_return + shstrtab_header->sh_offset;
+	*/
 
 	if (fd != -1)
 		close(fd);
