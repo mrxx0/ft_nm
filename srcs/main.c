@@ -124,17 +124,17 @@ int main(int argc, char **argv)
 		i++;	
 	}
 	
-	ft_printf("Checking type of section headers in %s...\n", argv[1]);
-	/*Elf64_Ehdr *eh = (Elf64_Ehdr*)mmap_return;
 	i = 0;
-	while (i < eh->e_phnum)
+	while (i < eh->e_shnum)
 	{
-		Elf64_Phdr
+		Elf64_Shdr *eh_shdr =  (Elf64_Shdr * )((char*)mmap_return + (eh->e_shoff + eh->e_shentsize * i));
+		char *sh_name = eh_shdr->sh_name;
+		ft_printf("Type = %s\n", sh_name);
+		i++;
 	}
-	Elf64_Ehdr *elf_header = (Elf64_Ehdr *)mmap_return;
-	Elf64_Shdr *shstrtab_header = (Elf64_Shdr *)((char *)mmap_return + (eh->e_shoff + eh->e_phentsize * eh->e_shstrndx));
-	const char *shstrtab = (const char *)mmap_return + shstrtab_header->sh_offset;
-	*/
+
+
+
 
 	if (fd != -1)
 		close(fd);
