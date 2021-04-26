@@ -124,18 +124,20 @@ int main(int argc, char **argv)
 		i++;	
 	}
 	
+	ft_printf("Checking section names in %si...\n", argv[1]);
+	Elf64_Shdr	*shdr = (Elf64_Shdr*)(mmap_return + eh->e_shoff);
+	int 		shnum = eh->e_shnum;
+
+	Elf64_Shdr 	*sh_strtab = &shdr[eh->e_shstrndx];
+	char*		sh_strtab_mmap = mmap_return + sh_strtab->sh_offset;
+
 	i = 0;
-	while (i < eh->e_shnum)
+	while (i < shnum)
 	{
-		Elf64_Shdr *eh_shdr =  (Elf64_Shdr * )((char*)mmap_return + (eh->e_shoff + eh->e_shentsize * i));
-		char *sh_name = eh_shdr->sh_name;
-		ft_printf("Type = %s\n", sh_name);
+		ft_printf("\t%2d: %4d '%s'\n", i, shdr[i].sh_name, sh_strtab_mmap + shdr[i].sh_name);
 		i++;
 	}
-
-
-
-
+	
 	if (fd != -1)
 		close(fd);
 	if (mmap_return != MAP_FAILED)
