@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 		i++;	
 	}
 	
-	ft_printf("Checking section names in %si...\n", argv[1]);
+	ft_printf("Checking section names in %s...\n", argv[1]);
 	Elf64_Shdr	*shdr = (Elf64_Shdr*)(mmap_return + eh->e_shoff);
 	int 		shnum = eh->e_shnum;
 
