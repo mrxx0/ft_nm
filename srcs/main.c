@@ -123,21 +123,34 @@ int main(int argc, char **argv)
 		TEST_HEADER_TYPE(type, PT_HIPROC, "PT_HIPROC");
 		i++;	
 	}
-	
-	ft_printf("Checking section names in %s...\n", argv[1]);
+
+	ft_printf("\nChecking section headers in %s...\n", argv[1]);
 	Elf64_Shdr	*shdr = (Elf64_Shdr*)(mmap_return + eh->e_shoff);
 	int 		shnum = eh->e_shnum;
 
-	Elf64_Shdr 	*sh_strtab = &shdr[eh->e_shstrndx];
-	char*		sh_strtab_mmap = mmap_return + sh_strtab->sh_offset;
+	//Elf64_Shdr 	*sh_strtab = &shdr[eh->e_shstrndx];
+	char* 		sh_strtab_mmap = mmap_return + (shdr[eh->e_shstrndx].sh_offset);
+	//char*		sh_strtab_mmap = mmap_return + sh_strtab->sh_offset;
 
 	i = 0;
+	ft_printf("%d\n", eh->e_shstrndx);
 	while (i < shnum)
 	{
 		ft_printf("\t%2d: %4d '%s'\n", i, shdr[i].sh_name, sh_strtab_mmap + shdr[i].sh_name);
 		i++;
 	}
-	
+
+	i = 0;
+	while (i < shnum)
+	{
+
+		if (shdr[i].sh_type == SHT_SYMTAB)
+		{
+			ft_printf("Found a symbol table  at i = [%d]!!\n", i);
+		}
+		i++;
+	}		
+
 	if (fd != -1)
 		close(fd);
 	if (mmap_return != MAP_FAILED)
