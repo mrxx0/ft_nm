@@ -126,31 +126,34 @@ int main(int argc, char **argv)
 
 	ft_printf("\nChecking section headers in %s...\n", argv[1]);
 	Elf64_Shdr	*shdr = (Elf64_Shdr*)(mmap_return + eh->e_shoff);
-	int 		shnum = eh->e_shnum;
-
-	//Elf64_Shdr 	*sh_strtab = &shdr[eh->e_shstrndx];
-	char* 		sh_strtab_mmap = mmap_return + (shdr[eh->e_shstrndx].sh_offset);
-	//char*		sh_strtab_mmap = mmap_return + sh_strtab->sh_offset;
+	char* 		shstrtab = mmap_return + (shdr[eh->e_shstrndx].sh_offset);
 
 	i = 0;
-	ft_printf("%d\n", eh->e_shstrndx);
-	while (i < shnum)
+	while (i < eh->e_shnum)
 	{
-		ft_printf("\t%2d: %4d '%s'\n", i, shdr[i].sh_name, sh_strtab_mmap + shdr[i].sh_name);
+		ft_printf("%s\n", shstrtab + shdr[i].sh_name);
 		i++;
 	}
 
 	i = 0;
-	while (i < shnum)
+	unsigned long j = 0;
+	ft_printf("%lu\n", shdr->sh_size);
+	while (i < eh->e_shnum)
 	{
 
 		if (shdr[i].sh_type == SHT_SYMTAB)
 		{
-			ft_printf("Found a symbol table  at i = [%d]!!\n", i);
+			ft_printf("Found static symbol  at i = [%d]!!\n", i);
+			Elf64_Sym *sym = (Elf64_Sym*)((char *)mmap_return + shdr[i].sh_offset);
+			ft_printf("%lu\n", shdr->sh_size/sizeof(Elf64_Sym));
+			while (j < (shdr->sh_size / sizeof(Elf64_Sym)))
+			{
+				ft_printf("%s\n", shstrtab[sym[j].st_name]);
+				j++;
+			}
 		}
 		i++;
-	}		
-
+	}
 	if (fd != -1)
 		close(fd);
 	if (mmap_return != MAP_FAILED)
