@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
 	i = 0;
 	Elf64_Ehdr *eh = (Elf64_Ehdr *)mmap_return;
-	while (i <eh->e_phnum)
+	while (i < eh->e_phnum)
 	{
 		Elf64_Phdr *ph = (Elf64_Phdr *)((char *)mmap_return + (eh->e_phoff + eh->e_phentsize * i));
 		uint32_t type = ph->p_type;
@@ -126,6 +126,7 @@ int main(int argc, char **argv)
 
 	ft_printf("\nChecking section headers in %s...\n", argv[1]);
 	Elf64_Shdr	*shdr = (Elf64_Shdr*)(mmap_return + eh->e_shoff);
+			printf("%4lu %4lu\n", shdr->sh_size, shdr->sh_entsize);	
 	char* 		shstrtab = mmap_return + (shdr[eh->e_shstrndx].sh_offset);
 
 	i = 0;
@@ -136,7 +137,7 @@ int main(int argc, char **argv)
 	}
 
 	i = 0;
-	unsigned long j = 0;
+	unsigned long j =0;
 	ft_printf("%lu\n", shdr->sh_size);
 	while (i < eh->e_shnum)
 	{
@@ -144,14 +145,25 @@ int main(int argc, char **argv)
 		if (shdr[i].sh_type == SHT_SYMTAB)
 		{
 			ft_printf("Found static symbol  at i = [%d]!!\n", i);
+			char *str_sym = (char*)(mmap_return + shdr[shdr[i].sh_link].sh_offset);
 			Elf64_Sym *sym = (Elf64_Sym*)((char *)mmap_return + shdr[i].sh_offset);
-			ft_printf("%lu\n", shdr->sh_size/sizeof(Elf64_Sym));
-			while (j < (shdr->sh_size / sizeof(Elf64_Sym)))
+			while (j < ((shdr[i].sh_size)/(shdr[i].sh_entsize)))
 			{
-				ft_printf("%s\n", shstrtab[sym[j].st_name]);
+				ft_printf("at [%d]\t%s\n",j, str_sym + sym[j].st_name);
 				j++;
 			}
 		}
+	/*	else if (shdr[i].sh_type == SHT_DYNAMIC)
+		{
+			ft_printf("Found dynamic symbol  at i = [%d]!!\n", i);
+			char *str_sym = (char*)(mmap_return + shdr[shdr[i].sh_link].sh_offset);
+			Elf64_Sym *sym = (Elf64_Sym*)((char *)mmap_return + shdr[i].sh_offset);
+			while (j < ((shdr[i].sh_size)/(shdr[i].sh_entsize)))
+			{
+				ft_printf("at [%d]\t%s\n",j, str_sym + sym[j].st_name);
+				j++;
+			}
+		}*/
 		i++;
 	}
 	if (fd != -1)
