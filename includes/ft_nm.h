@@ -14,6 +14,8 @@
 
 #define FAILURE -1
 #define SUCCESS 1
+#define BIG 0
+#define LITTLE 1
 typedef struct	s_section_elf
 {
 	char 		*name;
@@ -33,5 +35,8 @@ typedef struct	s_symbol_elf
 int	ft_perror(char *error_message, int fd);
 int	open_file(char *file_name, int *fd, char **mmap_return, struct stat *stat);
 int	check_file_is_elf(char *mmap_return, char *file_offset, char *file_name);
-
+int	parse_elf_64(char *mmap_return, char *file_offset);
+int	parse_elf_32(char *mmap_return, char *file_offset);
+uint8_t	get_endianness();
+_Bool	need_to_reverse(_Bool file_endian, _Bool system_endian);
 #endif 
