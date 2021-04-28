@@ -19,7 +19,7 @@ end=$ \033[0m
 
 #-----------------------------------------SRC/INC-------------------------------#
 
-FT_NM_FILES 	= main 
+FT_NM_FILES 	= main utils check
 
 INC_FILES 	= ft_nm.h
 LIB_BIN 	= libft.a
