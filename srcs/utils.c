@@ -1,5 +1,25 @@
 #include "../includes/ft_nm.h"
 
+_Bool	need_to_reverse(_Bool file_endian, _Bool system_endian)
+{
+	if (file_endian == LITTLE && system_endian == LITTLE)
+		printf("All LITTLE !\n");
+	if (file_endian == LITTLE && system_endian == BIG)
+		printf("LITTLE | BIG -> Need to reverse !\n");
+	if (file_endian == BIG && system_endian == BIG)
+		printf("All BIG !\n");
+	if (file_endian == BIG && system_endian == LITTLE)
+		printf("BIG | LITTLE -> Need to reverse !\n");
+	return (SUCCESS);
+}
+
+uint8_t	get_endianness(void)
+{
+	uint8_t x = 1;
+	char *y = (char*)&x;
+	return(*y);
+}
+
 int	open_file(char *file_name, int *fd, char **mmap_return,  struct stat *stat)
 {
 	*fd = open(file_name, O_RDONLY);
