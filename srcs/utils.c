@@ -13,11 +13,23 @@ _Bool	need_to_reverse(_Bool file_endian, _Bool system_endian)
 	return (SUCCESS);
 }
 
-uint8_t	get_endianness(void)
+_Bool	get_endian_file(Elf64_Ehdr *elf_header)
+{
+	if (elf_header->e_ident[EI_DATA] == ELFDATA2LSB)
+		return (LITTLE);
+	else
+		return (BIG);
+}
+
+_Bool	get_endian_system(void)
 {
 	uint8_t x = 1;
 	char *y = (char*)&x;
-	return(*y);
+
+	if (*y == LITTLE)
+		return (LITTLE);
+	else
+		return (BIG);
 }
 
 int	open_file(char *file_name, int *fd, char **mmap_return,  struct stat *stat)
