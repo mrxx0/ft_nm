@@ -9,7 +9,6 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	Elf64_Shdr		*elf_shdr;
 	char			*elf_strtable;
 	t_elf_section_part	*elf_sections = NULL;
-//	uint64_t		i = 0;
 	
 
 	elf_header = (Elf64_Ehdr *)mmap_return;
@@ -24,14 +23,8 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	elf_sections = stock_elf64_sections(reverse_for_64(elf_header->e_shnum, reverse), elf_shdr, elf_strtable, reverse);
 	if (elf_sections == MALLOC_FAILED)
 		return (ft_perror("Malloc failed to allocate memory\n.", 0));
-/*	while (i < reverse_for_64(elf_header->e_shnum, reverse))
-	{
-		if (reverse_for_64(elf_shdr[i].sh_type, reverse) == SHT_SYMTAB)
-		{
-			if (stock_elf_sym
-		}
-	}	
-*/	(void)file_offset;
+	parse_elf64_symbols(elf_header, elf_shdr, elf_sections, reverse);
+	(void)file_offset;
 	free(elf_sections);
 	return (EXIT_SUCCESS);
 }
