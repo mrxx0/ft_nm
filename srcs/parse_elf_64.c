@@ -2,7 +2,7 @@
 
 int	parse_elf_64(char *mmap_return, char *file_offset)
 {
-	_Bool			file_endian = 0;
+	int8_t			file_endian = 0;
 	_Bool			system_endian = 0;
 	_Bool			reverse = 0;
 	Elf64_Ehdr		*elf_header;
@@ -10,9 +10,13 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	char			*elf_strtable;
 	t_elf_section_part	*elf_sections = NULL;
 //	uint64_t		i = 0;
+	
 
 	elf_header = (Elf64_Ehdr *)mmap_return;
+	ft_printf("ELF ESHOFF = %d\n", elf_header->e_shoff);
 	file_endian = get_endian_file(elf_header);
+	if (file_endian == FAILURE)
+		return(ft_perror("File format not recognized\n", 0));
 	system_endian = get_endian_system();
 	reverse = need_to_reverse(file_endian, system_endian);
 	elf_shdr = (Elf64_Shdr *)(mmap_return + reverse_for_64(elf_header->e_shoff, reverse));
