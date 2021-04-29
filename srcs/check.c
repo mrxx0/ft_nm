@@ -12,7 +12,8 @@ int check_file_is_elf(char *mmap_return, char *file_offset, char *file_name)
 	{
 		if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS64)
 		{
-			parse_elf_64(mmap_return, file_offset);
+			if (parse_elf_64(mmap_return, file_offset) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
 		}
 		if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS32)
 		{
