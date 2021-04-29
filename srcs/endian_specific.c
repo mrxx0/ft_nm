@@ -19,12 +19,16 @@ _Bool   	need_to_reverse(_Bool file_endian, _Bool system_endian)
 		return (FALSE);
 }
 
-_Bool   	get_endian_file(Elf64_Ehdr *elf_header)
+int8_t   	get_endian_file(Elf64_Ehdr *elf_header)
 {
-	if (elf_header->e_ident[EI_DATA] == ELFDATA2LSB)
+	if (elf_header->e_ident[EI_DATA] == ELFDATANONE)
+		return (FAILURE);
+	else if (elf_header->e_ident[EI_DATA] == ELFDATA2LSB)
 		return (LITTLE);
-	else
+	else if (elf_header->e_ident[EI_DATA] == ELFDATA2MSB)
 		return (BIG);
+	else
+		return (FAILURE);
 }
 
 _Bool   	get_endian_system(void)
