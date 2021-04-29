@@ -39,13 +39,14 @@ typedef struct	s_symbol_elf
 //	uint64_t	value;
 }		t_symbol_elf;
 
-int		ft_perror(char *error_message, int fd);
-int		open_file(char *file_name, int *fd, char **mmap_return, struct stat *stat);
-int		check_file_is_elf(char *mmap_return, char *file_offset, char *file_name);
-int		parse_elf_64(char *mmap_return, char *file_offset);
-int		parse_elf_32(char *mmap_return, char *file_offset);
-_Bool		get_endian_system();
-_Bool		get_endian_file(Elf64_Ehdr *elf_header);
-_Bool		need_to_reverse(_Bool file_endian, _Bool system_endian);
-uint64_t	reverse_for_64(uint64_t offset, _Bool reverse);
+int			ft_perror(char *error_message, int fd);
+int			open_file(char *file_name, int *fd, char **mmap_return, struct stat *stat);
+int			check_file_is_elf(char *mmap_return, char *file_offset, char *file_name);
+int			parse_elf_64(char *mmap_return, char *file_offset);
+int			parse_elf_32(char *mmap_return, char *file_offset);
+_Bool			get_endian_system();
+_Bool			get_endian_file(Elf64_Ehdr *elf_header);
+_Bool			need_to_reverse(_Bool file_endian, _Bool system_endian);
+uint64_t		reverse_for_64(uint64_t offset, _Bool reverse);
+t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
 #endif 
