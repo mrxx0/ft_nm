@@ -19,11 +19,16 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 		if (elf_sym[j].st_name != 0 && ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)) != STT_FILE
 			&& ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)) != STT_SECTION)
 			{
-				ft_printf("TYPE = %u\t", ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)));
+		/*		ft_printf("TYPE = %u\t", ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)));
 				ft_printf("BIND = %u\t", ELF64_ST_BIND(reverse_for_64(elf_sym[j].st_info, reverse)));
 				ft_printf("NAME = %s\t", elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse));
 				ft_printf("SHNDX = %u\t", reverse_for_64(elf_sym[j].st_shndx, reverse));
-				ft_printf("VALUE = %u\n", reverse_for_64(elf_sym[j].st_value, reverse));
+				ft_printf("VALUE = %016x\n", reverse_for_64(elf_sym[j].st_value, reverse));
+		*/
+				
+				ft_printf("%016x\t", reverse_for_64(elf_sym[j].st_value, reverse));
+				ft_printf("%u\t", ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)));
+				ft_printf("%s\n", elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse));
 			}
 			j++;
 	}
