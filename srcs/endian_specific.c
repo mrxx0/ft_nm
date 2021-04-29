@@ -1,11 +1,13 @@
 #include "../includes/ft_nm.h"
 
-uint64_t	reverse_for_64(uint64_t offset)
+uint64_t	reverse_for_64(uint64_t offset, _Bool reverse)
 {
-	offset = (offset & 0x00000000FFFFFFFF) << 32 | (offset & 0xFFFFFFFF00000000) >> 32;
-	offset = (offset & 0x0000FFFF0000FFFF) << 16 | (offset & 0xFFFF0000FFFF0000) >> 16;
-	offset = (offset & 0x00FF00FF00FF00FF) << 8  | (offset & 0xFF00FF00FF00FF00) >> 8;	
-
+	if (reverse == TRUE)
+	{
+		offset = (offset & 0x00000000FFFFFFFF) << 32 | (offset & 0xFFFFFFFF00000000) >> 32;
+		offset = (offset & 0x0000FFFF0000FFFF) << 16 | (offset & 0xFFFF0000FFFF0000) >> 16;
+		offset = (offset & 0x00FF00FF00FF00FF) << 8  | (offset & 0xFF00FF00FF00FF00) >> 8;	
+	}
 	return (offset);
 }
 
