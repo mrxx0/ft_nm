@@ -29,14 +29,14 @@ typedef struct	s_elf_section_part
 	uint32_t	flag;
 }		t_elf_section_part;
 
-typedef struct	s_symbol_elf
+typedef struct	s_elf_symbol_part
 {
 	char 		*name;
 	uint8_t		type;
-//	uint8_t		bind;
-//	uint8_t		shndx;
-//	uint64_t	value;
-}		t_symbol_elf;
+	uint8_t		bind;
+	uint8_t		shndx;
+	uint64_t	value;
+}		t_elf_symbol_part;
 
 int			ft_perror(char *error_message, int fd);
 int			open_file(char *file_name, int *fd, char **mmap_return, struct stat *stat);
@@ -48,4 +48,5 @@ int8_t			get_endian_file(Elf64_Ehdr *elf_header);
 _Bool			need_to_reverse(_Bool file_endian, _Bool system_endian);
 uint64_t		reverse_for_64(uint64_t offset, _Bool reverse);
 t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
+_Bool			parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
 #endif 
