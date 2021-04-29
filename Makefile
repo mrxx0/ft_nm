@@ -19,7 +19,7 @@ end=$ \033[0m
 
 #-----------------------------------------SRC/INC-------------------------------#
 
-FT_NM_FILES 	= main utils check parse_elf_64 parse_elf_32
+FT_NM_FILES 	= main utils check parse_elf_64 parse_elf_32 endian_specific
 
 INC_FILES 	= ft_nm.h
 LIB_BIN 	= libft.a
