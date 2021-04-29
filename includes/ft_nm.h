@@ -14,8 +14,13 @@
 
 #define FAILURE -1
 #define SUCCESS 1
+
+#define TRUE 1
+#define FALSE 0
+
 #define BIG 0
 #define LITTLE 1
+
 typedef struct	s_section_elf
 {
 	char 		*name;

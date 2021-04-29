@@ -2,15 +2,10 @@
 
 _Bool	need_to_reverse(_Bool file_endian, _Bool system_endian)
 {
-	if (file_endian == LITTLE && system_endian == LITTLE)
-		printf("All LITTLE !\n");
-	if (file_endian == LITTLE && system_endian == BIG)
-		printf("LITTLE | BIG -> Need to reverse !\n");
-	if (file_endian == BIG && system_endian == BIG)
-		printf("All BIG !\n");
-	if (file_endian == BIG && system_endian == LITTLE)
-		printf("BIG | LITTLE -> Need to reverse !\n");
-	return (SUCCESS);
+	if (file_endian != system_endian)
+		return (TRUE);
+	else
+		return (FALSE);
 }
 
 _Bool	get_endian_file(Elf64_Ehdr *elf_header)
