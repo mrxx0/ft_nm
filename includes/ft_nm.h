@@ -13,7 +13,6 @@
 #include <errno.h>
 
 #define FAILURE -1
-#define SUCCESS 1
 
 #define TRUE 1
 #define FALSE 0
@@ -45,7 +44,7 @@ int			check_file_is_elf(char *mmap_return, char *file_offset, char *file_name);
 int			parse_elf_64(char *mmap_return, char *file_offset);
 int			parse_elf_32(char *mmap_return, char *file_offset);
 _Bool			get_endian_system();
-_Bool			get_endian_file(Elf64_Ehdr *elf_header);
+int8_t			get_endian_file(Elf64_Ehdr *elf_header);
 _Bool			need_to_reverse(_Bool file_endian, _Bool system_endian);
 uint64_t		reverse_for_64(uint64_t offset, _Bool reverse);
 t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
