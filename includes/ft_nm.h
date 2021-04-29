@@ -21,12 +21,14 @@
 #define BIG 0
 #define LITTLE 1
 
-typedef struct	s_section_elf
+#define MALLOC_FAILED NULL
+
+typedef struct	s_elf_section_part
 {
 	char 		*name;
 	uint32_t	type;
 	uint32_t	flag;
-}		t_section_elf;
+}		t_elf_section_part;
 
 typedef struct	s_symbol_elf
 {
@@ -45,5 +47,5 @@ int		parse_elf_32(char *mmap_return, char *file_offset);
 _Bool		get_endian_system();
 _Bool		get_endian_file(Elf64_Ehdr *elf_header);
 _Bool		need_to_reverse(_Bool file_endian, _Bool system_endian);
-uint64_t	reverse_for_64(uint64_t offset);
+uint64_t	reverse_for_64(uint64_t offset, _Bool reverse);
 #endif 
