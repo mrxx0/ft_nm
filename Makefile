@@ -3,7 +3,7 @@ CC = clang
 CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -Werror
-CFLAGS += -Wpadded
+# CFLAGS += -Wpadded
 #-------------------------------------COLOR VARIABLE----------------------------#
 
 red_li=$ \033[1;31m
