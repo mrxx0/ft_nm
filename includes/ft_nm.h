@@ -32,9 +32,10 @@ typedef struct	s_elf_section_part
 typedef struct	s_elf_symbol_part
 {
 	char 		*name;
+	char		sym_type;
 	uint8_t		type;
 	uint8_t		bind;
-	uint8_t		shndx;
+	uint16_t	shndx;
 	uint64_t	value;
 }		t_elf_symbol_part;
 
@@ -49,4 +50,5 @@ _Bool			need_to_reverse(_Bool file_endian, _Bool system_endian);
 uint64_t		reverse_for_64(uint64_t offset, _Bool reverse);
 t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
 _Bool			parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
+void    		elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym);
 #endif 
