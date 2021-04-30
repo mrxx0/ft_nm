@@ -12,7 +12,7 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	
 
 	elf_header = (Elf64_Ehdr *)mmap_return;
-	ft_printf("ELF ESHOFF = %d\n", elf_header->e_shoff);
+	//ft_printf("ELF ESHOFF = %d\n", elf_header->e_shoff);
 	file_endian = get_endian_file(elf_header);
 	if (file_endian == FAILURE)
 		return(ft_perror("File format not recognized\n", 0));
@@ -23,7 +23,12 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	elf_sections = stock_elf64_sections(reverse_for_64(elf_header->e_shnum, reverse), elf_shdr, elf_strtable, reverse);
 	if (elf_sections == MALLOC_FAILED)
 		return (ft_perror("Malloc failed to allocate memory\n.", 0));
-	parse_elf64_symbols(elf_header, elf_shdr, elf_sections, reverse);
+	if (parse_elf64_symbols(elf_header, elf_shdr, elf_sections, reverse) == FALSE)
+	{
+		if (elf_sections)
+			free(elf_sections);
+		return (ft_perror("No symbol\n", 0));
+	}
 	(void)file_offset;
 	free(elf_sections);
 	return (EXIT_SUCCESS);

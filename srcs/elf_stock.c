@@ -40,17 +40,22 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 _Bool			parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse)
 {
 	uint64_t i = 0;
+	_Bool 		is_symbol = FALSE;
 
 	while (i < reverse_for_64(elf_header->e_shnum, reverse))
 	{
 		if (reverse_for_64(elf_shdr[i].sh_type, reverse) == SHT_SYMTAB)
 		{
 			stock_elf64_symbols((Elf64_Sym *)((char *)elf_header + reverse_for_64(elf_shdr[i].sh_offset, reverse)), elf_shdr, elf_header, i, elf_sections, reverse);
+			is_symbol = TRUE;
 		}
+		
 		i++;
 	}
+	if (is_symbol == FALSE)
+		return (FALSE);
 	
-	return TRUE;
+	return (TRUE);
 }
 
 t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse)
