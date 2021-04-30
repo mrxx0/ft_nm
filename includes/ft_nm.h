@@ -26,7 +26,7 @@ typedef struct	s_elf_section_part
 {
 	char 		*name;
 	uint32_t	type;
-	uint32_t	flag;
+	uint64_t	flag;
 }		t_elf_section_part;
 
 typedef struct	s_elf_symbol_part
