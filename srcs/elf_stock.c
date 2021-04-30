@@ -3,8 +3,8 @@
 int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *elf_header, int i, t_elf_section_part *elf_sections, _Bool reverse)
 {
 	t_elf_symbol_part *elf_symbols = NULL;
-	int					symctr = 0;
-	int					j = 0;
+	uint64_t			symctr = 0;
+	uint64_t			j = 0;
 	int					k = 0;
 	char				*elf_symstrtable;
 	(void) elf_sections;
@@ -16,17 +16,17 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 		return (ft_perror("Malloc failed to allocate memory\n.", 0));
 	while (j < symctr)
 	{
-		if (elf_sym[j].st_name != 0 && ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)) != STT_FILE
-			&& ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)) != STT_SECTION)
+		if (elf_sym[j].st_name != 0 && ELF64_ST_TYPE((unsigned char)reverse_for_64(elf_sym[j].st_info, reverse)) != STT_FILE
+			&& ELF64_ST_TYPE((unsigned char)reverse_for_64(elf_sym[j].st_info, reverse)) != STT_SECTION)
 			{
 				elf_symbols[k].value = reverse_for_64(elf_sym[j].st_value, reverse);
 				if (elf_symbols[k].value != 0)
 					ft_printf("%016x\t", elf_symbols[k].value);
 				else
 					ft_printf("%18c",'\t');
-				elf_symbols[k].type = ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse));
+				elf_symbols[k].type = (uint8_t)ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse));
 
-				elf_symbols[k].bind = ELF64_ST_BIND(reverse_for_64(elf_sym[j].st_info, reverse));
+				elf_symbols[k].bind = (uint8_t)ELF64_ST_BIND(reverse_for_64(elf_sym[j].st_info, reverse));
 
 				elf_symbols[k].shndx = (uint16_t)reverse_for_64(elf_sym[j].st_shndx, reverse);
 
@@ -55,7 +55,7 @@ _Bool			parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_
 
 	while (i < reverse_for_64(elf_header->e_shnum, reverse))
 	{
-		if (reverse_for_64(elf_shdr[i].sh_type, reverse) == SHT_SYMTAB)
+		if ((uint32_t)reverse_for_64(elf_shdr[i].sh_type, reverse) == SHT_SYMTAB)
 		{
 			stock_elf64_symbols((Elf64_Sym *)((char *)elf_header + reverse_for_64(elf_shdr[i].sh_offset, reverse)), elf_shdr, elf_header, i, elf_sections, reverse);
 			is_symbol = TRUE;
@@ -83,7 +83,7 @@ t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *st
 		while (i < e_shnum)
 		{
 			sections[i].name = strtable + reverse_for_64(shdr[i].sh_name, reverse);
-			sections[i].type = reverse_for_64(shdr[i].sh_type, reverse);
+			sections[i].type = (uint32_t)reverse_for_64(shdr[i].sh_type, reverse);
 			sections[i].flag = reverse_for_64(shdr[i].sh_flags, reverse);
 			i++;
 		}	
