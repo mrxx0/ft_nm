@@ -20,7 +20,7 @@ end=$ \033[0m
 #-----------------------------------------SRC/INC-------------------------------#
 
 FT_NM_FILES 	= main utils check parse_elf_64 parse_elf_32 endian_specific	\
-			elf_stock						
+			elf_stock elf_symbol_type
 
 INC_FILES 	= ft_nm.h
 LIB_BIN 	= libft.a
