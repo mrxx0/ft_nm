@@ -5,7 +5,7 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 	t_elf_symbol_part *elf_symbols = NULL;
 	int					symctr = 0;
 	int					j = 0;
-	// int					k = 0;
+	int					k = 0;
 	char				*elf_symstrtable;
 	(void) elf_sections;
 
@@ -25,10 +25,18 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 				ft_printf("SHNDX = %u\t", reverse_for_64(elf_sym[j].st_shndx, reverse));
 				ft_printf("VALUE = %016x\n", reverse_for_64(elf_sym[j].st_value, reverse));
 		*/
-				
-				ft_printf("%016x\t", reverse_for_64(elf_sym[j].st_value, reverse));
-				ft_printf("%u\t", ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)));
-				ft_printf("%s\n", elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse));
+				elf_symbols[k].value = reverse_for_64(elf_sym[j].st_value, reverse);
+				// ft_printf("%016x\t", reverse_for_64(elf_sym[j].st_value, reverse));
+				ft_printf("%016x\t", elf_symbols[k].value);
+
+				elf_symbols[k].type = ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse));
+				// ft_printf("%u\t", ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)));
+				ft_printf("%u\t", elf_symbols[k].type);
+
+				elf_symbols[k].name = elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse);
+				// ft_printf("%s\n", elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse));
+				ft_printf("%s\n", elf_symbols[k].name);
+				k++;
 			}
 			j++;
 	}
