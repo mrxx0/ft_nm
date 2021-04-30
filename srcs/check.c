@@ -10,6 +10,7 @@ int check_file_is_elf(char *mmap_return, char *file_offset, char *file_name)
 		(unsigned char)mmap_return[EI_MAG2] == 'L' &&
 		(unsigned char)mmap_return[EI_MAG3] == 'F')
 	{
+
 		if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS64)
 		{
 			if (parse_elf_64(mmap_return, file_offset) == EXIT_FAILURE)
@@ -19,7 +20,7 @@ int check_file_is_elf(char *mmap_return, char *file_offset, char *file_name)
 		{
 			parse_elf_32(mmap_return, file_offset);
 		}
-		ft_printf("File is ELF format !\n");
+		//ft_printf("File is ELF format !\n");
 		return (EXIT_SUCCESS);
 	}
 	else
