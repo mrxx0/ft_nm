@@ -20,8 +20,10 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 			&& ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse)) != STT_SECTION)
 			{
 				elf_symbols[k].value = reverse_for_64(elf_sym[j].st_value, reverse);
-				ft_printf("%016x\t", elf_symbols[k].value);
-
+				if (elf_symbols[k].value != 0)
+					ft_printf("%016x\t", elf_symbols[k].value);
+				else
+					ft_printf("%18c",'\t');
 				elf_symbols[k].type = ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse));
 				ft_printf("%u\t", elf_symbols[k].type);
 
