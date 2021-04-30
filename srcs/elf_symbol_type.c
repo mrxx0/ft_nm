@@ -4,7 +4,8 @@ void    elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, El
 {
     (void)elf_sym;
     elf_symbols->sym_type = '\0';
-    if (elf_symbols->bind == STB_GNU_UNIQUE)
+    // if (elf_symbols->bind == STB_GNU_UNIQUE)
+    if (elf_symbols->bind == STB_LOOS)
         elf_symbols->sym_type = 'u';
     else if (elf_symbols->bind == STB_WEAK)
     {
