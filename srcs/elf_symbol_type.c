@@ -27,9 +27,27 @@ void    elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, El
 		elf_symbols->sym_type = 'C';
 	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_NOBITS
 		&& elf_shdr[elf_symbols->shndx].sh_flags == (SHF_ALLOC | SHF_WRITE))
-		elf_symbols->sym_type = 'B';	
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			elf_symbols->sym_type = 'b';
+		else
+			elf_symbols->sym_type = 'B';
+	}		
 	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS
 		&& elf_shdr[elf_symbols->shndx].sh_flags == (SHF_ALLOC))
-		elf_symbols->sym_type = 'R';
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			elf_symbols->sym_type = 'r';
+		else
+			elf_symbols->sym_type = 'R';
+	}
+	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS
+		&& elf_shdr[elf_symbols->shndx].sh_flags == (SHF_ALLOC + SHF_WRITE))
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			elf_symbols->sym_type = 'd';
+		else
+			elf_symbols->sym_type = 'D';
+	}
 	return ;
 }
