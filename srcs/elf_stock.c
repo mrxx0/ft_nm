@@ -32,7 +32,7 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 
 				elf_symbols[k].name = elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse);
 				
-				elf_symbol_type(&elf_symbols[k], elf_shdr, &elf_sym[j]);
+				elf_symbol_type(&elf_symbols[k], elf_shdr, &elf_sym[j], elf_sections);
 				ft_printf("%4c\t", elf_symbols[k].sym_type);
 				// ft_printf("%u\t", elf_symbols[k].type);
 				// ft_printf("%u\t", elf_symbols[k].bind);
@@ -43,7 +43,6 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 			}
 			j++;
 	}
-	
 	return (TRUE);
 }
 
