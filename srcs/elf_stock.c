@@ -25,20 +25,14 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 				else
 					ft_printf("%16c",' ');
 				elf_symbols[k].type = (uint8_t)ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse));
-
 				elf_symbols[k].bind = (uint8_t)ELF64_ST_BIND(reverse_for_64(elf_sym[j].st_info, reverse));
-
 				elf_symbols[k].shndx = (uint16_t)reverse_for_64(elf_sym[j].st_shndx, reverse);
-
 				elf_symbols[k].name = elf_symstrtable + reverse_for_64(elf_sym[j].st_name, reverse);
+				elf_symbols[k].sym_type = elf_symbol_type(&elf_symbols[k], elf_shdr, &elf_sym[j], elf_sections);
 				
-				elf_symbol_type(&elf_symbols[k], elf_shdr, &elf_sym[j], elf_sections);
 				ft_printf("%4c\t", elf_symbols[k].sym_type);
-				// ft_printf("%u\t", elf_symbols[k].type);
-				// ft_printf("%u\t", elf_symbols[k].bind);
-
-				// ft_printf("%u\t", elf_symbols[k].shndx);
 				ft_printf("%s\n", elf_symbols[k].name);
+
 				k++;
 			}
 			j++;

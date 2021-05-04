@@ -1,18 +1,49 @@
 #include "../includes/ft_nm.h"
-void 	elf_type_progbits(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections)
+char elf_type_initarray(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr)
+{
+	if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC + SHF_WRITE)
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			return('t');
+		else
+			return('T');
+	}
+	else
+		return('?');
+}
+char elf_type_dynamic(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr)
+{
+	if (elf_shdr[elf_symbols->shndx].sh_flags == (SHF_ALLOC + SHF_WRITE))
+	{	
+		if (elf_symbols->bind == STB_LOCAL)
+			return('d');
+		else
+			return('D');
+	}
+	else if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC)
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			return('r');
+		else
+			return('R');
+	}
+	else
+		return('?');
+}
+char 	elf_type_progbits(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections)
 {
 	if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
 	{
 		if (elf_symbols->bind == STB_WEAK)
 		{
-			elf_symbols->sym_type = 'W';
 			if (elf_symbols->shndx == SHN_UNDEF)
 				elf_symbols->sym_type = 'w';
+			return('W');
 		}
 		else if (elf_symbols->bind == STB_LOCAL)
-			elf_symbols->sym_type = 't';
+			return('t');
 		else
-			elf_symbols->sym_type = 'T';
+			return('T');
 	}
 	else if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC + SHF_WRITE)
 	{
@@ -21,168 +52,166 @@ void 	elf_type_progbits(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, t_
 			if (elf_symbols->type == STT_OBJECT)
 			{
 				if (elf_symbols->shndx == SHN_UNDEF)
-					elf_symbols->sym_type = 'v';
+					return('v');
 				else
-					elf_symbols->sym_type = 'V';
+					return('V');
 			}
 			else if (elf_symbols->shndx == SHN_UNDEF)
-				elf_symbols->sym_type = 'w';
+				return('w');
 			else
-				elf_symbols->sym_type = 'W';
+				return('W');
 		}
 		else if (elf_symbols->bind == STB_GLOBAL)
 		{
 			if (elf_symbols->type == STT_OBJECT)		
 			{
 				if (elf_symbols->shndx == SHN_UNDEF)
-					elf_symbols->sym_type = 'G';
+					return('G');
 				else
-					elf_symbols->sym_type = 'D';
+					return('D');
 			}
 		}
-		else if (elf_symbols->bind == STB_LOOS)
-		{
-			elf_symbols->sym_type = 'u';
-			if (elf_symbols->bind == STB_LOCAL)
-				elf_symbols->sym_type = 'd';
-			else
-				elf_symbols->sym_type = 'D';
-		}
+		if (elf_symbols->bind == STB_LOOS)
+			return('u');
+		if (elf_symbols->bind == STB_LOCAL)
+			return('d');
+		else
+			return('D');
 	}
 	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE + SHF_EXECINSTR)
 	{
 		if (elf_symbols->bind == STB_LOCAL)
-			elf_symbols->sym_type = 't';
+			return('t');
 		else if (elf_symbols->bind == STB_GLOBAL)
-			elf_symbols->sym_type = 'T';
+			return('T');
 	}
 	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_MERGE)
 	{
 		if (elf_symbols->bind == STB_LOCAL)
-			elf_symbols->sym_type = 'r';
+			return('r');
 		else if (elf_symbols->bind == STB_GLOBAL)
-			elf_symbols->sym_type = 'R';
+			return('R');
 	}
 	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_MERGE + SHF_STRINGS)
 	{
 		if (elf_symbols->bind == STB_LOCAL)
-			elf_symbols->sym_type = 'r';
-		else if (elf_symbols->bind == STB_GLOBAL)
-			elf_symbols->sym_type = 'R';
+			return('r');
+		else
+			return('R');
 	}
-
-}
-void 	elf_type_nobits(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections)
-{	
-	if (elf_sections[elf_symbols->shndx].flag == SHF_WRITE + SHF_ALLOC + SHF_TLS)
+	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC)
+	{
+		if (elf_symbols->bind == STB_WEAK)
 		{
-			if (elf_symbols->bind == STB_LOCAL)
-				elf_symbols->sym_type = 'b';
-			else if (elf_symbols->bind == STB_GLOBAL)
-				elf_symbols->sym_type = 'B';
+			if (elf_symbols->type == STT_OBJECT)
+			{
+				if (elf_sections[elf_symbols->shndx].flag == SHN_UNDEF)
+					return('v');
+				else
+					return('V');
+			}
 		}
-	else if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC 
-			&& elf_shdr[elf_symbols->shndx].sh_flags ==  SHF_WRITE)
+		if (elf_symbols->bind == STB_LOOS)
+			return('u');
+		if (elf_symbols->bind == STB_LOCAL)
+			return('r');
+		else 
+			return('R');
+	}
+	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + (elf_sections[elf_symbols->shndx].flag & SHF_MASKPROC))
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			return('r');
+		else
+			return('R');
+	}
+	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE + (elf_sections[elf_symbols->shndx].flag & SHF_MASKPROC))
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			return('g');
+		else
+			return('G');
+	}
+	return ('?');
+}
+
+char 	elf_type_nobits(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections)
+{	
+	if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC + SHF_WRITE)
 	{
 		if (elf_symbols->bind == STB_LOOS)
-			elf_symbols->sym_type = 'u';
+			return('u');
 		if (elf_symbols->type == STT_OBJECT)
 		{
-			if (elf_symbols == STB_LOCAL)
-				elf_symbols->sym_type = 'b';
-			else if (elf_symbols->bind == STB_GLOBAL)
-				elf_symbols->sym_type = 'B';
-			else	
-				elf_symbols->sym_type = 'V';
+			return(elf_symbols->bind == STB_LOCAL ? 'b' : (elf_symbols->bind == STB_GLOBAL) ? 'B' : 'V');
+			// if (elf_symbols == STB_LOCAL)
+			// 	return('b');
+			// else if (elf_symbols->bind == STB_GLOBAL)
+			// 	return('B');
+			// else	
+			// 	return('V');
 		}
-		else if (elf_symbols->bind == STB_LOCAL)
-			elf_symbols->sym_type = 'b';
-		else if (elf_symbols->bind == STB_GLOBAL)
-			elf_symbols->sym_type = 'B';
+		if (elf_symbols->bind == STB_LOCAL)
+			return('b');
+		else
+			return('B');
+	}
+	else if (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE + SHF_TLS)
+	{
+		if (elf_symbols->bind == STB_LOCAL)
+			return('b');
+		else
+			return('B');
 	}
 	else if (elf_sections[elf_symbols->shndx].flag == (elf_sections[elf_symbols->shndx].flag & SHF_MASKPROC) + SHF_ALLOC + SHF_WRITE)
 	{
 		if (elf_symbols->type == STT_OBJECT)
 		{
 			if (elf_symbols->bind == STB_LOCAL)
-				elf_symbols->sym_type = 'B';
-			else if (elf_symbols->bind == STB_GLOBAL)
-				elf_symbols->sym_type = 'S';
+				return('B');
+			else
+				return('S');
 		}
 		else if (elf_symbols->bind == STB_LOCAL)
-			elf_symbols->sym_type = 's';
-		else if (elf_symbols->bind == STB_GLOBAL)
-			elf_symbols->sym_type = 'S';
+			return('s');
+		else
+			return('S');
 	}
+	else
+		return('?');
 }
-void    elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections)
+char    elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections)
 {
 	(void)elf_sym;
 	if (elf_symbols->bind == STB_GNU_UNIQUE) // if (elf_symbols->bind == STB_LOOS)
-		elf_symbols->sym_type = 'u';
+		return('u');
 	else if (elf_symbols->bind == STB_WEAK)
 	{
-		elf_symbols->sym_type = 'W';
 		if (elf_symbols->shndx == SHN_UNDEF)
-			elf_symbols->sym_type = 'w';
+			return('w');
+		return('W');
 	}
 	else if (elf_symbols->bind == STB_WEAK && elf_symbols->type == STT_OBJECT)
 	{
-		elf_symbols->sym_type = 'V';
 		if (elf_symbols->shndx == SHN_UNDEF)
-			elf_symbols->sym_type = 'v';
+			return('v');
+		return('V');
 	}
 	else if (elf_symbols->shndx == SHN_UNDEF)
-		elf_symbols->sym_type = 'U';
+		return('U');
 	else if (elf_symbols->shndx == SHN_ABS)
-		elf_symbols->sym_type = 'A';
+		return('A');
 	else if (elf_symbols->shndx == SHN_COMMON)
-		elf_symbols->sym_type = 'C';
+		return('C');
 	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_NOBITS)
-		elf_type_nobits(elf_symbols, elf_shdr, elf_sections);
+		return(elf_type_nobits(elf_symbols, elf_shdr, elf_sections));
 	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS)
-		elf_type_progbits(elf_symbols, elf_shdr, elf_sections);
-	// else if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC)
-	// {
-	// 	if (elf_symbols->bind == STB_LOCAL)
-	// 		elf_symbols->sym_type = 'r';
-	// 	else
-	// 		elf_symbols->sym_type = 'R';
-	// }
-	// else if (elf_shdr[elf_symbols->shndx].sh_flags == (SHF_ALLOC + SHF_WRITE))
-	// {
-	// 	if (elf_symbols->bind == STB_LOCAL)
-	// 		elf_symbols->sym_type = 'd';
-	// 	else
-	// 		elf_symbols->sym_type = 'D';
-	// }
-	// else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_DYNAMIC)
-	// {
-	// 	if (elf_shdr[elf_symbols->shndx].sh_flags == (SHF_ALLOC + SHF_WRITE))
-	// 	{	
-	// 	if (elf_symbols->bind == STB_LOCAL)
-	// 	elf_symbols->sym_type = 'd';
-	// 	else
-	// 	elf_symbols->sym_type = 'D';
-	// 	}
-	// }
-	// else if (elf_shdr[elf_symbols->shndx].sh_flags == SHF_ALLOC)
-	// 	{
-	// 	if (elf_symbols->bind == STB_LOCAL)
-	// 	elf_symbols->sym_type = 'r';
-	// 	else
-	// 	elf_symbols->sym_type = 'R';
-	// 	}
-	// }
-
-//  else if (elf_sections[elf_symbols->shndx].flag == ((elf_sections[elf_symbols->shndx].flag & SHF_MASKOS) | (SHF_ALLOC | SHF_WRITE)))
-//      {
-//      if (elf_symbols->bind == STB_LOCAL)
-//      elf_symbols->sym_type = 'g';
-//      else
-//      elf_symbols->sym_type = 'G';
-//      }
+		return(elf_type_progbits(elf_symbols, elf_shdr, elf_sections));
+	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_DYNAMIC)
+		return(elf_type_dynamic(elf_symbols, elf_shdr));
+	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_INIT_ARRAY
+		|| elf_shdr[elf_symbols->shndx].sh_type == SHT_PREINIT_ARRAY)
+		return(elf_type_initarray(elf_symbols, elf_shdr));
 	else
-		elf_symbols->sym_type = '?';
-return ;
+		return('?');
 }

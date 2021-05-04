@@ -12,7 +12,6 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	
 
 	elf_header = (Elf64_Ehdr *)mmap_return;
-	//ft_printf("ELF ESHOFF = %d\n", elf_header->e_shoff);
 	file_endian = get_endian_file(elf_header);
 	if (file_endian == FAILURE)
 		return(ft_perror("File format not recognized\n", 0));
