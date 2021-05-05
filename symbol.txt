@@ -1,0 +1,35 @@
+A = sym->st_shndx == SHN_ABS
+
+B = sym->st_info  == STT_OBJECT, shdr[symtab->st_shndx]sh_type == SHT_NOBITS, shdr[symtab->st_shndx]sh_flags == SHF_ALLOC + SHF_WRITE
+
+C = sym->st_shndx == SHN_COMMON
+
+D = sym->st_info  == OBJECT/NOTYPE, shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == SHF_ALLOC + SHF_WRITE
+    shdr[symtab->st_shndx]sh_type == SHT_DYNAMIC
+G = 
+
+i = sym->st_info  == STT_LOOS, shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == SHF_ALLOC + SHF_EXECINSTR
+
+Nn = sym->st_info  == STT_NOTYPE, shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == 0
+     sym->st_info  == STT_OBJECT, shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == 0
+
+p = 
+
+R = sym->st_info  == ? , shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == SHF_ALLOC
+
+S =
+
+T = sym->st_info  == ? , shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == SHF_ALLOC + SHF_EXECINSTR
+
+U = sym->st_shndx == SHN_UNDEF
+u = sym->st_info  == STB_GNU_UNIQUE
+
+V = sym->bind  == STB_WEAK, sym->type == STT_OBJECT ,  //shdr[symtab->st_shndx]sh_type == SHT_PROGBITS, shdr[symtab->st_shndx]sh_flags == SHF_ALLOC + SHF_EXECINSTR
+-> v = sym->st_shndx == SHN_UNDEF
+
+W = sym->st_info  == STB_WEAK
+-> w = sym->st_shndx == SHN_UNDEF
+
+- = 
+
+? =
