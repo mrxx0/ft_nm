@@ -118,23 +118,36 @@
 char    elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections)
 {
 	(void)elf_sym;
-	if (elf_symbols->shndx == SHN_ABS)
+	if (elf_symbols->bind == STB_GNU_UNIQUE)
+		return ('u');
+	else if (elf_symbols->bind == STB_WEAK)
+	{
+		if (elf_symbols->shndx == SHN_UNDEF)
+			return ('w');
+		return ('W');
+	}
+	else if (elf_symbols->shndx == SHN_UNDEF)
+		return ('U');
+	else if (elf_symbols->shndx == SHN_ABS)
 		return ('A');
-	else if (elf_symbols->type == STT_OBJECT && elf_shdr[elf_symbols->shndx].sh_type == SHT_NOBITS && elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE)
+	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_NOBITS && elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE)
 		return ('B');
 	else if (elf_symbols->shndx == SHN_COMMON)
 		return ('C');
-	else if (((elf_symbols->type == STT_OBJECT || elf_symbols->type == STT_NOTYPE)
-	&& elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS
-	&& elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE)
-	|| elf_shdr[elf_symbols->shndx].sh_type == SHT_DYNAMIC)
+	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_DYNAMIC || (elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS
+	&& elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE))
 		return ('D');
 	else if (elf_symbols->type == STT_LOOS && elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS &&elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
 		return ('i');
 	else if ((elf_symbols->type == STT_NOTYPE || elf_symbols->type == STT_OBJECT) && elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS &&elf_sections[elf_symbols->shndx].flag == 0)
 		return ('N');
-	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS && elf_sections[elf_symbols->shndx].flag == SHF_ALLOC)
+	else if ((elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS) 
+		&& ((elf_sections[elf_symbols->shndx].flag == SHF_ALLOC) || (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_MERGE)))
 		return ('R');
+	else if ((elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS && elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
+		|| (elf_shdr[elf_symbols->shndx].sh_type == SHT_INIT_ARRAY && elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE)
+		|| (elf_shdr[elf_symbols->shndx].sh_type == SHT_FINI_ARRAY && elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_WRITE))	
+		return ('T');
 	else
 		return ('?');
 	// if (elf_symbols->bind == STB_GNU_UNIQUE) // if (elf_symbols->bind == STB_LOOS)
