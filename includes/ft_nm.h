@@ -4,6 +4,7 @@
 #include "../libft/includes/libft.h"
 #include <string.h>
 #include <elf.h>
+#include <ar.h>
 #include <stdio.h>
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -39,16 +40,17 @@ typedef struct	s_elf_symbol_part
 	uint64_t	value;
 }		t_elf_symbol_part;
 
-int			ft_perror(char *error_message, int fd);
-int			open_file(char *file_name, int *fd, char **mmap_return, struct stat *stat);
-int			check_file_is_elf(char *mmap_return, char *file_offset, char *file_name);
-int			parse_elf_64(char *mmap_return, char *file_offset);
-int			parse_elf_32(char *mmap_return, char *file_offset);
-_Bool			get_endian_system();
-int8_t			get_endian_file(Elf64_Ehdr *elf_header);
-_Bool			need_to_reverse(_Bool file_endian, _Bool system_endian);
-uint64_t		reverse_for_64(uint64_t offset, _Bool reverse);
+int					ft_perror(char *error_message, int fd);
+int					open_file(char *file_name, int *fd, char **mmap_return, struct stat *stat);
+int					check_file_is_elf(char *mmap_return, char *file_offset, char *file_name);
+int					parse_elf_64(char *mmap_return, char *file_offset);
+int					parse_elf_32(char *mmap_return, char *file_offset);
+int					parse_ar(char *mmap_return, char *file_offset);
+_Bool				get_endian_system();
+int8_t				get_endian_file(Elf64_Ehdr *elf_header);
+_Bool				need_to_reverse(_Bool file_endian, _Bool system_endian);
+uint64_t			reverse_for_64(uint64_t offset, _Bool reverse);
 t_elf_section_part	*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
-_Bool			parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
-char    		elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
+_Bool				parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
+char    			elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
 #endif 
