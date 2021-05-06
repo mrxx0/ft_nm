@@ -19,10 +19,7 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 			&& ELF64_ST_TYPE((unsigned char)reverse_for_64(elf_sym[j].st_info, reverse)) != STT_SECTION)
 			{
 				elf_symbols[k].value = reverse_for_64(elf_sym[j].st_value, reverse);
-				if (elf_symbols[k].value != 0)
-					ft_printf("%016x", elf_symbols[k].value);
-				else
-					ft_printf("%16c",' ');
+				
 				elf_symbols[k].type = (uint8_t)ELF64_ST_TYPE(reverse_for_64(elf_sym[j].st_info, reverse));
 				elf_symbols[k].bind = (uint8_t)ELF64_ST_BIND(reverse_for_64(elf_sym[j].st_info, reverse));
 				elf_symbols[k].shndx = (uint16_t)reverse_for_64(elf_sym[j].st_shndx, reverse);
@@ -30,9 +27,15 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 				elf_symbols[k].sym_type = elf_symbol_type(&elf_symbols[k], elf_shdr, &elf_sym[j], elf_sections);
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
+				if (elf_symbols[k].value != 0)
+					ft_printf("%016x", elf_symbols[k].value);
+				else if ((elf_symbols[k].sym_type == 'T' || elf_symbols[k].sym_type == 't' || elf_symbols[k].sym_type == 'b') 
+					&& elf_symbols[k].value == 0 )
+					ft_printf("%s","0000000000000000");
+				else
+					ft_printf("%16c", ' ');
 				ft_printf(" %c", elf_symbols[k].sym_type);
 				ft_printf(" %s\n", elf_symbols[k].name);
-
 				k++;
 			}
 			j++;
@@ -53,7 +56,6 @@ _Bool			parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_
 			stock_elf64_symbols((Elf64_Sym *)((char *)elf_header + reverse_for_64(elf_shdr[i].sh_offset, reverse)), elf_shdr, elf_header, i, elf_sections, reverse);
 			is_symbol = TRUE;
 		}
-		
 		i++;
 	}
 	if (is_symbol == FALSE)
