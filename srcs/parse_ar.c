@@ -46,6 +46,7 @@ int	parse_ar(char *mmap_return, char *file_offset)
         size = ft_atoi(ar->ar_size);
         mmap_return = mmap_return + sizeof(*ar) + size;
     }
+    ft_printf("strtab = %s\n", str_tab);
     // int i = 0;
     // ft_printf("[%c] \t [%c]\n", mmap_return[0], mmap_return[1]);
     // if (mmap_return[i] == '/'&& mmap_return[i + 1] == '/')
