@@ -25,7 +25,6 @@ int check_file_is_elf(char *mmap_return, char *file_offset, char *file_name)
 	else if (ft_strncmp(mmap_return, ARMAG, SARMAG) == 0)
 	{
 		ft_printf("This is an ar .a file !\n");
-		ft_printf("%s\n", mmap_return);
 			if (parse_ar(mmap_return, file_offset) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 	}
