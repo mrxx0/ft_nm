@@ -14,11 +14,18 @@ int	parse_ar(char *mmap_return, char *file_offset)
     ft_printf("ar_size = [%s]\n", ar->ar_size);
     ft_printf("ar_fmag = [%s]\n", ar->ar_fmag);
 
-    mmap_return = mmap_return + SARMAG;
+    ft_printf("atoi = %d\n", ft_atoi(ar->ar_size));
+    mmap_return = mmap_return + SARMAG + sizeof(*ar) + ft_atoi(ar->ar_size);
     ft_printf("mmap_return = [%s]\n", mmap_return);
+
+    // mmap_return = mmap_return + SARMAG;
+    // ft_printf("mmap_return = [%s]\n", mmap_return);
     
-    mmap_return = mmap_return + ft_atoi(ar->ar_size);
-    ft_printf("mmap_return = [%s]\n", mmap_return);
+    // mmap_return = mmap_return + ft_atoi(ar->ar_size);
+    // ft_printf("mmap_return = [%s]\n", mmap_return);
+
+    // mmap_return = mmap_return + sizeof(struct ar_hdr);
+    // ft_printf("mmap_return = [%s]\n", mmap_return);
     if (mmap_return > file_offset)
 		return (ft_perror("File is corrupted\n", 0));
     
