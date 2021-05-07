@@ -27,13 +27,17 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 				elf_symbols[k].sym_type = elf_symbol_type(&elf_symbols[k], elf_shdr, &elf_sym[j], elf_sections);
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
-				if (elf_symbols[k].value != 0)
-					ft_printf("%016x", elf_symbols[k].value);
-				else if ((elf_symbols[k].sym_type == 'T' || elf_symbols[k].sym_type == 't' || elf_symbols[k].sym_type == 'b') 
-					&& elf_symbols[k].value == 0 )
-					ft_printf("%s","0000000000000000");
-				else
+				if (elf_symbols[k].shndx == SHN_UNDEF)
 					ft_printf("%16c", ' ');
+				else
+					ft_printf("%016x", elf_symbols[k].value);
+				// if (elf_symbols[k].value != 0)
+				// 	ft_printf("%016x", elf_symbols[k].value);
+				// else if ((elf_symbols[k].sym_type == 'T' || elf_symbols[k].sym_type == 't' || elf_symbols[k].sym_type == 'b' || elf_symbols[k].sym_type == 'n') 
+				// 	&& elf_symbols[k].value == 0 )
+				// 	ft_printf("%s","0000000000000000");
+				// else
+				// 	ft_printf("%16c", ' ');
 				ft_printf(" %c", elf_symbols[k].sym_type);
 				ft_printf(" %s\n", elf_symbols[k].name);
 				k++;
