@@ -139,7 +139,8 @@ char    elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, El
 		return ('D');
 	else if (elf_symbols->type == STT_LOOS && elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS &&elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
 		return ('i');
-	else if ((elf_symbols->type == STT_NOTYPE || elf_symbols->type == STT_OBJECT) && elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS &&elf_sections[elf_symbols->shndx].flag == 0)
+	else if (elf_shdr[elf_symbols->shndx].sh_type == SHT_GROUP)
+	///*((elf_symbols->type == STT_NOTYPE || elf_symbols->type == STT_OBJECT) && */(elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS &&elf_sections[elf_symbols->shndx].flag == 0)
 		return ('N');
 	else if ((elf_shdr[elf_symbols->shndx].sh_type == SHT_PROGBITS) 
 		&& ((elf_sections[elf_symbols->shndx].flag == SHF_ALLOC) || (elf_sections[elf_symbols->shndx].flag == SHF_ALLOC + SHF_MERGE)))
