@@ -18,10 +18,13 @@ int	parse_ar(char *mmap_return, char *file_offset)
     ft_printf("mmap_return + SARMAG = [%s]\n", mmap_return);
  
     mmap_return = mmap_return + sizeof(*ar) ;
-    ft_printf("mmap_return + sizeof(*ar) = [%s]\n", mmap_return);
+    ft_printf("mmap_return + sizeof(*ar) = [%s]\n", mmap_return -1);
+    ft_printf("sizeof(*ar) = [%u]\n", sizeof(*ar));
 
     mmap_return = mmap_return + ft_atoi(ar->ar_size);
     ft_printf("mmap_return + ft_atoi(ar->ar_size) = [%s]\n", mmap_return);
+    ft_printf("ft_atoi(ar->ar_size) = [%u]\n", ft_atoi(ar->ar_size));
+
     // ft_printf("ar_name = [%s]\n", ar->ar_name);
     // ft_printf("ar_date = [%s]\n", ar->ar_date);
     // ft_printf("ar_uid = [%s]\n", ar->ar_uid);
@@ -43,7 +46,6 @@ int	parse_ar(char *mmap_return, char *file_offset)
         size = ft_atoi(ar->ar_size);
         mmap_return = mmap_return + sizeof(*ar) + size;
     }
-    ft_printf("mmap_return = [%s]\n", mmap_return);
     // int i = 0;
     // ft_printf("[%c] \t [%c]\n", mmap_return[0], mmap_return[1]);
     // if (mmap_return[i] == '/'&& mmap_return[i + 1] == '/')
