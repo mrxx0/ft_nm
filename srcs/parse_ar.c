@@ -1,29 +1,80 @@
 #include "../includes/ft_nm.h"
 
-void skip_file_identifier(int *file_identifier, char *mmap_return)
+char *ft_strndup(char *s1, size_t n)
 {
-    while (*file_identifier >= 0 && mmap_return[*file_identifier] == ' ')
-        *file_identifier = *file_identifier - 1;
+    char *ret, *tmp;
+
+    ret = malloc(sizeof(char *) * (n + 1));
+    if (!ret)
+        return (NULL);
+    tmp = ret;
+    while ((*ret++ = *s1++) && n--);
+    *ret = '\0';
+    return (tmp);
 }
 
-int	parse_ar(char *mmap_return, char *file_offset)
+void    print_ar(char *name)
 {
+    // ft_printf("\n");
+    ft_putstr("\n");
+    while (*name != '/')
+    {
+        ft_putchar(*name);
+        // ft_printf("%c", *name);
+        name++;
+    }
+    ft_putstr(":\n");
+    // ft_printf(":\n");
+}
+
+char *get_name(char **str_tab)
+{
+    int idx;
+    char *name, *tmp;
+
+    idx = 0;
+    name = NULL;
+    while (!(ft_isalpha(**str_tab)))
+        (*str_tab)++;
+    tmp = *str_tab;
+    while (*tmp != '/')
+        tmp++;
+    idx = tmp - *str_tab;
+    name = ft_strndup(*str_tab, idx);
+    *str_tab = *str_tab + idx;
+    return (name);
+}
+
+int skip_file_identifier(char *mmap_return)
+{
+    int file_identifier = 16;
+
+    while (file_identifier >= 0 && mmap_return[file_identifier] == ' ')
+        file_identifier = file_identifier - 1;
+    return (file_identifier);
+}
+
+int	parse_ar(char *mmap_return, char *file_offset, char *file_name)
+{
+    if (mmap_return > file_offset)
+		return (ft_perror("File is corrupted\n", 0));
     struct ar_hdr *ar;
     char    *str_tab = NULL;
 
     ar = (struct ar_hdr *)(mmap_return + SARMAG);
-    ft_printf("mmap_return = [%s]\n", mmap_return);
+    // ft_printf("mmap_return = [%s]\n", mmap_return);
+    
 
     mmap_return = mmap_return + SARMAG;
-    ft_printf("mmap_return + SARMAG = [%s]\n", mmap_return);
+    // ft_printf("mmap_return + SARMAG = [%s]\n", mmap_return);
  
     mmap_return = mmap_return + sizeof(*ar) ;
-    ft_printf("mmap_return + sizeof(*ar) = [%s]\n", mmap_return -1);
-    ft_printf("sizeof(*ar) = [%u]\n", sizeof(*ar));
+    // ft_printf("mmap_return + sizeof(*ar) = [%s]\n", mmap_return -1);
+    // ft_printf("sizeof(*ar) = [%u]\n", sizeof(*ar));
 
     mmap_return = mmap_return + ft_atoi(ar->ar_size);
-    ft_printf("mmap_return + ft_atoi(ar->ar_size) = [%s]\n", mmap_return);
-    ft_printf("ft_atoi(ar->ar_size) = [%u]\n", ft_atoi(ar->ar_size));
+    // ft_printf("mmap_return + ft_atoi(ar->ar_size) = [%s]\n", mmap_return);
+    // ft_printf("ft_atoi(ar->ar_size) = [%u]\n", ft_atoi(ar->ar_size));
 
     // ft_printf("ar_name = [%s]\n", ar->ar_name);
     // ft_printf("ar_date = [%s]\n", ar->ar_date);
@@ -33,20 +84,47 @@ int	parse_ar(char *mmap_return, char *file_offset)
     // ft_printf("ar_size = [%s]\n", ar->ar_size);
     // ft_printf("ar_fmag = [%s]\n", ar->ar_fmag);
 
-    mmap_return = mmap_return + SARMAG + sizeof(*ar) + ft_atoi(ar->ar_size);
-    ft_printf("mmap_return = [%s]\n", mmap_return);
-    int file_identifier = 16;
-    int size = 0;
-    skip_file_identifier(&file_identifier, mmap_return);
-    if (file_identifier == 1 
+    // mmap_return = mmap_return + SARMAG + sizeof(*ar) + ft_atoi(ar->ar_size);
+    // ft_printf("mmap_return = [%s]\n", mmap_return);
+    
+    if (skip_file_identifier(mmap_return) == 1 
     && mmap_return[0] == '/' && mmap_return[1] == '/')
     {
         str_tab = mmap_return;
         ar = (struct ar_hdr *)mmap_return;
-        size = ft_atoi(ar->ar_size);
-        mmap_return = mmap_return + sizeof(*ar) + size;
+        mmap_return = mmap_return + sizeof(*ar) + ft_atoi(ar->ar_size);
     }
-    ft_printf("strtab = %s\n", str_tab);
+   // ft_printf("strtab = %s\n", str_tab);
+    int len = 0;
+    char *name;
+    while (mmap_return < file_offset)
+    {
+        // ft_printf("mmap_return < file_offset = %d\n", mmap_return < file_offset);
+        // ft_printf("mmap_return = %u\n", mmap_return);
+        // ft_printf("file_offset = %u\n\n", file_offset);
+
+        len = 0;
+        name = NULL;
+        ar = (struct ar_hdr*)mmap_return;
+        while (ar->ar_name[len] != '/')
+            len++;
+        if (validate_elf_type(mmap_return + sizeof(*ar), file_offset) == 0)
+            return (ft_perror("File format not recognized\n", 0));
+        if (len == 0)
+        {            
+            name = get_name(&str_tab);
+           print_ar(name);
+        }
+        else
+           print_ar(ar->ar_name);
+        if (check_file_is_elf(mmap_return + sizeof(*ar), file_offset, file_name) == EXIT_FAILURE)
+          return (ft_perror("Corrupted\n", 0));
+        mmap_return = mmap_return + sizeof(struct ar_hdr) + ft_atoi(ar->ar_size);
+        free(name);
+    }
+    // ft_printf("mmap_return = %u\n", mmap_return);
+
+    // ft_printf("Going for %d\n", str_idx);
     // int i = 0;
     // ft_printf("[%c] \t [%c]\n", mmap_return[0], mmap_return[1]);
     // if (mmap_return[i] == '/'&& mmap_return[i + 1] == '/')
@@ -66,8 +144,7 @@ int	parse_ar(char *mmap_return, char *file_offset)
 
     // mmap_return = mmap_return + sizeof(struct ar_hdr);
     // ft_printf("mmap_return = [%s]\n", mmap_return);
-    if (mmap_return > file_offset)
-		return (ft_perror("File is corrupted\n", 0));
+    
     
     return (EXIT_SUCCESS);
 }
