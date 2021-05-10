@@ -1,5 +1,23 @@
 #include "../includes/ft_nm.h"
 
+int validate_elf_type(char *mmap_return, char *file_offset)
+{
+	if (mmap_return > file_offset)
+		return (0);
+	if (ft_strncmp(mmap_return, ELFMAG, 4) == 0)
+	{
+		if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS64)
+			return (1);
+		if ((unsigned char)mmap_return[EI_CLASS] == ELFCLASS32)
+			return (1);
+		return (0);
+	}
+	else if (ft_strncmp(mmap_return, ARMAG, SARMAG) == 0)
+		return (1);
+	else
+		return (0);
+}
+
 int check_file_is_elf(char *mmap_return, char *file_offset, char *file_name)
 {
 	if (mmap_return > file_offset)
@@ -24,8 +42,8 @@ int check_file_is_elf(char *mmap_return, char *file_offset, char *file_name)
 	}
 	else if (ft_strncmp(mmap_return, ARMAG, SARMAG) == 0)
 	{
-		ft_printf("This is an ar .a file !\n");
-			if (parse_ar(mmap_return, file_offset) == EXIT_FAILURE)
+		// ft_printf("This is an ar .a file !\n");
+			if (parse_ar(mmap_return, file_offset, file_name) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 	}
 	else
