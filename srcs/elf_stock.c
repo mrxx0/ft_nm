@@ -44,6 +44,9 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 			}
 			j++;
 	}
+	// DEBUG TEMP
+	if (elf_symbols)
+		free(elf_symbols);
 	return (TRUE);
 }
 
