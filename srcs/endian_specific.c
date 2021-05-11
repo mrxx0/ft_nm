@@ -1,5 +1,15 @@
 #include "../includes/ft_nm.h"
 
+uint32_t	reverse_for_32(uint32_t offset, _Bool reverse)
+{
+	if (reverse == TRUE)
+	{
+		offset = (offset << 16) | (offset >> 16);
+		offset = ((offset << 8) & 0xFF00FF00) | ((offset >> 8) & 0xFF00FF);
+	}
+	return (offset);
+}
+
 uint64_t	reverse_for_64(uint64_t offset, _Bool reverse)
 {
 	if (reverse == TRUE)
@@ -19,7 +29,19 @@ _Bool   	need_to_reverse(_Bool file_endian, _Bool system_endian)
 		return (FALSE);
 }
 
-int8_t   	get_endian_file(Elf64_Ehdr *elf_header)
+int8_t   	get_endian_file_32(Elf32_Ehdr *elf_header)
+{
+	if (elf_header->e_ident[EI_DATA] == ELFDATANONE)
+		return (FAILURE);
+	else if (elf_header->e_ident[EI_DATA] == ELFDATA2LSB)
+		return (LITTLE);
+	else if (elf_header->e_ident[EI_DATA] == ELFDATA2MSB)
+		return (BIG);
+	else
+		return (FAILURE);
+}
+
+int8_t   	get_endian_file_64(Elf64_Ehdr *elf_header)
 {
 	if (elf_header->e_ident[EI_DATA] == ELFDATANONE)
 		return (FAILURE);

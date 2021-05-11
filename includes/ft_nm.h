@@ -47,10 +47,14 @@ int				parse_elf_64(char *mmap_return, char *file_offset);
 int				parse_elf_32(char *mmap_return, char *file_offset);
 int				parse_ar(char *mmap_return, char *file_offset, char *file_name);
 _Bool				get_endian_system();
-int8_t				get_endian_file(Elf64_Ehdr *elf_header);
+int8_t				get_endian_file_64(Elf64_Ehdr *elf_header);
+int8_t				get_endian_file_32(Elf32_Ehdr *elf_header);
 _Bool				need_to_reverse(_Bool file_endian, _Bool system_endian);
 uint64_t			reverse_for_64(uint64_t offset, _Bool reverse);
+uint32_t			reverse_for_32(uint32_t offset, _Bool reverse);
 t_elf_section_part		*stock_elf64_sections(int e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
+t_elf_section_part		*stock_elf32_sections(int e_shnum, Elf32_Shdr *shdr, char *strtable, _Bool reverse);
+
 _Bool				parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
 char    			elf_symbol_type(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
 

@@ -12,12 +12,14 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	
 
 	elf_header = (Elf64_Ehdr *)mmap_return;
-	file_endian = get_endian_file(elf_header);
+	file_endian = get_endian_file_64(elf_header);
 	if (file_endian == FAILURE)
 		return(ft_perror("File format not recognized\n", 0));
 	system_endian = get_endian_system();
 	reverse = need_to_reverse(file_endian, system_endian);
 	elf_shdr = (Elf64_Shdr *)(mmap_return + (uint32_t)reverse_for_64(elf_header->e_shoff, reverse));
+	// if (!elf_shdr->sh_link)
+	// 	return (ft_perror("sh_link not set\n", 0));
 	elf_strtable = mmap_return + reverse_for_64(elf_shdr[reverse_for_64(elf_header->e_shstrndx, reverse)].sh_offset, reverse);
 	elf_sections = stock_elf64_sections((uint16_t)reverse_for_64(elf_header->e_shnum, reverse), elf_shdr, elf_strtable, reverse);
 	if (elf_sections == MALLOC_FAILED)
