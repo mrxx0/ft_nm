@@ -2,46 +2,50 @@
 
 char *ft_strndup(char *s1, size_t n)
 {
-    char *ret, *tmp;
+    char *str;
+    size_t i;
 
-    ret = malloc(sizeof(char *) * (n + 1));
-    if (!ret)
-        return (NULL);
-    tmp = ret;
-    while ((*ret++ = *s1++) && n--);
-    *ret = '\0';
-    return (tmp);
+    str = malloc(sizeof(char) * (n + 1));
+    if (!str)
+        return (MALLOC_FAILED);
+    i = 0;
+    while (s1[i] != '\0' && i <= n)
+    {
+        str[i] = s1[i];
+        i++;
+    }
+    str[i] = '\0';
+    return (str);
 }
 
 void    print_ar(char *name)
 {
-    // ft_printf("\n");
     ft_putstr("\n");
     while (*name != '/')
     {
         ft_putchar(*name);
-        // ft_printf("%c", *name);
         name++;
     }
     ft_putstr(":\n");
-    // ft_printf(":\n");
 }
 
 char *get_name(char **str_tab)
 {
-    int idx;
-    char *name, *tmp;
+    int     i;
+    char    *name;
+    char    *tmp;
 
-    idx = 0;
+    i = 0;
     name = NULL;
     while (!(ft_isalpha(**str_tab)))
         (*str_tab)++;
     tmp = *str_tab;
     while (*tmp != '/')
         tmp++;
-    idx = tmp - *str_tab;
-    name = ft_strndup(*str_tab, idx);
-    *str_tab = *str_tab + idx;
+    i = tmp - *str_tab;
+    if (!(name = ft_strndup(*str_tab, i)))
+        return (MALLOC_FAILED);
+    *str_tab = *str_tab + i;
     return (name);
 }
 
@@ -111,8 +115,9 @@ int	parse_ar(char *mmap_return, char *file_offset, char *file_name)
         if (validate_elf_type(mmap_return + sizeof(*ar), file_offset) == 0)
             return (ft_perror("File format not recognized\n", 0));
         if (len == 0)
-        {            
-            name = get_name(&str_tab);
+        {   
+            if (!(name = get_name(&str_tab)))
+		        return (ft_perror("Malloc failed to allocate memory\n.", 0));
            print_ar(name);
         }
         else
