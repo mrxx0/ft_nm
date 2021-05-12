@@ -16,4 +16,4 @@ jobs:
     - name: make
       run: make
     - name: diff
-      run: bash ../../diff.sh ft_nm
+      run: bash diff.sh ft_nm
