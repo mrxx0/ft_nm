@@ -8,6 +8,6 @@ echo $1
 echo "Diff START"
 diff -uN ft_nm.txt nm.txt
 echo "Diff END"
-echo "\n"
+echo -e "\n"
 rm -r ft_nm.txt nm.txt
 
