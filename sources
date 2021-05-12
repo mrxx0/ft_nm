@@ -5,3 +5,32 @@ https://www.conradk.com/codebase/2017/05/28/elf-from-scratch/
 https://refspecs.linuxbase.org/elf/gabi4+/ch4.intro.html
 
 http://www.skyfree.org/linux/references/ELF_Format.pdf
+
+
+Swap explanation :
+
+
+
+uint64_t	reverse_for_64(uint64_t offset, _Bool reverse)
+{
+	if (reverse == TRUE)
+	{					   //ABCDEFGH IJKLMNOP					 //ABCDEFGH IJKLMNOP
+		offset = (offset & 0x00000000FFFFFFFF) << 32 | (offset & 0xFFFFFFFF00000000) >> 32;
+						   //IJKLMNOP					 // 			   ABCDEFGH
+				           //IJKLMNOP ABCDEFGH
+		offset = (offset & 0x0000FFFF0000FFFF) << 16 | (offset & 0xFFFF0000FFFF0000) >> 16;
+				           //IJKL MNOP ABCD EFGH
+				           //MNOP IJKL EFGH ABCD
+
+		offset = (offset & 0x00FF00FF00FF00FF) << 8  | (offset & 0xFF00FF00FF00FF00) >> 8;
+				           //MNOP IJKL EFGH ABCD
+				           //MN OP IJ KL EF GH AB CD
+                           
+						   //OP MN KL IJ GH EF CD AB
+
+						   
+						   //AB CD EF GH IJ KL MN OP
+						   //OP MN KL IJ GH EF CD AB
+	}
+	return (offset);
+}
