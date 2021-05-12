@@ -15,4 +15,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: make
       run: make
+    - name: diff
       run: ./diff.sh ft_nm
