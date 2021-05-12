@@ -1,22 +1,42 @@
 #include "../includes/ft_nm.h"
 
-uint32_t	reverse_for_32(uint32_t offset, _Bool reverse)
+// uint32_t	reverse_for_32(uint32_t offset, _Bool reverse)
+// {
+// 	// printf("reverse begin = %u\n", offset);
+// 	if (reverse == TRUE)
+// 	{
+// 		// offset = (offset & 0x000000FF) << 24 | (offset & 0xFF000000) >> 24;
+// 		offset = (offset & 0x000000FF) << 24 | (offset & 0x0000FF00) << 8;
+// 		offset = (offset & 0x00FF0000) >> 8 | (offset & 0xFF000000) >> 24;
+// 	}
+// 	// printf("reverse outpu = %u\n", offset);
+// 	return (offset);
+// }
+
+uint32_t	reverse_for_32(uint32_t x, size_t size, _Bool reverse)
 {
-	if (reverse == TRUE)
-	{
-		offset = (offset << 16) | (offset >> 16);
-		offset = ((offset << 8) & 0xFF00FF00) | ((offset >> 8) & 0xFF00FF);
-	}
-	return (offset);
+	int				i = 0;
+	uint32_t		y = 0;
+	unsigned char	*ptr_x, *ptr_y;
+	// printf("before %u\n", x);
+	if (!reverse)
+		return (x);
+	ptr_x = (unsigned char *)&x;
+	ptr_y = (unsigned char *)&y;
+	while (--size)
+		ptr_y[i++] = ptr_x[size];
+	ptr_y[i++] = ptr_x[size];
+	// printf("after %u\n", y);
+	return (y);
 }
 
 uint64_t	reverse_for_64(uint64_t offset, _Bool reverse)
 {
 	if (reverse == TRUE)
-	{
-		offset = (offset & 0x00000000FFFFFFFF) << 32 | (offset & 0xFFFFFFFF00000000) >> 32;
+	{					   
+		offset = (offset & 0x00000000FFFFFFFF) << 32 | (offset & 0xFFFFFFFF00000000) >> 32;			   
 		offset = (offset & 0x0000FFFF0000FFFF) << 16 | (offset & 0xFFFF0000FFFF0000) >> 16;
-		offset = (offset & 0x00FF00FF00FF00FF) << 8  | (offset & 0xFF00FF00FF00FF00) >> 8;	
+		offset = (offset & 0x00FF00FF00FF00FF) << 8  | (offset & 0xFF00FF00FF00FF00) >> 8;
 	}
 	return (offset);
 }
