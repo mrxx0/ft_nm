@@ -56,8 +56,10 @@ t_elf_section_part		*stock_elf64_sections(uint16_t e_shnum, Elf64_Shdr *shdr, ch
 t_elf_section_part		*stock_elf32_sections(uint16_t e_shnum, Elf32_Shdr *shdr, char *strtable, _Bool reverse);
 _Bool				parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
 _Bool				parse_elf32_symbols(Elf32_Ehdr *elf_header, Elf32_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
-char    			elf_symbol_type_64(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
-char    			elf_symbol_type_32(t_elf_symbol_part *elf_symbols, Elf32_Shdr *elf_shdr, Elf32_Sym *elf_sym, t_elf_section_part *elf_sections);
+// char    			elf_symbol_type_64(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
+// char    			elf_symbol_type_32(t_elf_symbol_part *elf_symbols, Elf32_Shdr *elf_shdr, Elf32_Sym *elf_sym, t_elf_section_part *elf_sections);
+char 				elf_symbol_type(t_elf_symbol_part *elf_symbols, t_elf_section_part *elf_sections);
+
 
 int 				validate_elf_type(char *mmap_return, char *file_offset);
 
