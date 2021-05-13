@@ -12,7 +12,8 @@ int	parse_elf_32(char *mmap_return, char *file_offset)
 	t_elf_section_part	*elf_sections = NULL;
 
 	elf_header = (Elf32_Ehdr *)mmap_return;
-		
+	if (mmap_return + elf_header->e_shoff > file_offset)
+		return (ft_perror("File corrupted\n", 0));	
 	file_endian = get_endian_file_32(elf_header);
 	if (file_endian == FAILURE)
 		return(ft_perror("File format not recognized\n", 0));
