@@ -4,7 +4,7 @@
 nm -p $1 > nm.txt
 
 
-DIFF=$(diff -uN ft_nm.txt nm.txt)
+DIFF=$(diff -y --suppress-common-lines ft_nm.txt nm.txt)
 
 if [ "$DIFF" != "" ]
 then
