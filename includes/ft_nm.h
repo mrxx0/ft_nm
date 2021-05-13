@@ -50,7 +50,7 @@ _Bool				get_endian_system();
 int8_t				get_endian_file_64(Elf64_Ehdr *elf_header);
 int8_t				get_endian_file_32(Elf32_Ehdr *elf_header);
 _Bool				need_to_reverse(_Bool file_endian, _Bool system_endian);
-uint64_t			reverse_for_64(uint64_t offset, _Bool reverse);
+uint64_t			reverse_for_64(uint64_t x, size_t size, _Bool reverse);
 uint32_t			reverse_for_32(uint32_t x, size_t size, _Bool reverse);
 t_elf_section_part		*stock_elf64_sections(uint16_t e_shnum, Elf64_Shdr *shdr, char *strtable, _Bool reverse);
 t_elf_section_part		*stock_elf32_sections(uint16_t e_shnum, Elf32_Shdr *shdr, char *strtable, _Bool reverse);
