@@ -10,7 +10,7 @@ if [ "$DIFF" != "" ]
 then
 	echo $1
 	echo "Diff START"
-	echo $DIFF
+	printf $DIFF
 	echo "Diff END"
 	echo -e "\n"
 fi
