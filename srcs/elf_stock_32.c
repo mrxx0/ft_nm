@@ -19,13 +19,12 @@ int			stock_elf32_symbols(Elf32_Sym *elf_sym, Elf32_Shdr *elf_shdr, Elf32_Ehdr *
 			&& ELF32_ST_TYPE((unsigned char)reverse_for_32(elf_sym[j].st_info, sizeof(elf_sym->st_info), reverse)) != STT_SECTION)
 			{
 				elf_symbols[k].value = reverse_for_32(elf_sym[j].st_value, sizeof(elf_sym[j].st_value), reverse);
-				
+		
 				elf_symbols[k].type = (uint8_t)ELF32_ST_TYPE(reverse_for_32(elf_sym[j].st_info, sizeof(elf_sym[j].st_info), reverse));
 				elf_symbols[k].bind = (uint8_t)ELF32_ST_BIND(reverse_for_32(elf_sym[j].st_info, sizeof(elf_sym[j].st_info),reverse));
 				elf_symbols[k].shndx = (uint16_t)reverse_for_32(elf_sym[j].st_shndx,sizeof(elf_sym[j].st_shndx), reverse);
 				elf_symbols[k].name = elf_symstrtable + reverse_for_32(elf_sym[j].st_name,sizeof(elf_sym[j].st_name), reverse);
-				// elf_symbols[k].sym_type = elf_symbol_type_32(&elf_symbols[k], elf_shdr, &elf_sym[j], elf_sections);
-				elf_symbols[k].sym_type = elf_symbol_type(&elf_symbols[k], elf_sections);
+				elf_symbols[k].sym_type = elf_symbol_type(elf_symbols[k], elf_sections, (int)reverse_for_32(elf_header->e_shnum,sizeof(elf_header->e_shnum), reverse));
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
 				if (elf_symbols[k].shndx == SHN_UNDEF)
@@ -34,6 +33,7 @@ int			stock_elf32_symbols(Elf32_Sym *elf_sym, Elf32_Shdr *elf_shdr, Elf32_Ehdr *
 					ft_printf("%08x", elf_symbols[k].value);
 				ft_printf(" %c", elf_symbols[k].sym_type);
 				ft_printf(" %s\n", elf_symbols[k].name);
+				
 				k++;
 			}
 			j++;
@@ -79,7 +79,7 @@ t_elf_section_part	*stock_elf32_sections(uint16_t e_shnum, Elf32_Shdr *shdr, cha
 		while (i < e_shnum)
 		{
 			sections[i].name = strtable + reverse_for_32(shdr[i].sh_name, sizeof(shdr[i].sh_name), reverse);
-			sections[i].type = (uint32_t)reverse_for_32(shdr[i].sh_type, sizeof(shdr[i].sh_name), reverse);
+			sections[i].type = reverse_for_32(shdr[i].sh_type, sizeof(shdr[i].sh_name), reverse);
 			sections[i].flag = reverse_for_32(shdr[i].sh_flags, sizeof(shdr[i].sh_flags), reverse);
 			i++;
 		}	

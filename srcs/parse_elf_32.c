@@ -24,6 +24,14 @@ int	parse_elf_32(char *mmap_return, char *file_offset)
 	elf_sections = stock_elf32_sections((uint16_t)reverse_for_32(elf_header->e_shnum, sizeof(elf_header->e_shnum), reverse), elf_shdr, elf_strtable, reverse);
 	if (elf_sections == MALLOC_FAILED)
 		return (ft_perror("Malloc failed to allocate memory\n.", 0));
+	// uint16_t i = 0;
+	// while (i < (uint16_t)reverse_for_32(elf_header->e_shnum, sizeof(elf_header->e_shnum), reverse) )
+	// {
+	// 	printf("sections[%d].name = %s\n",i, elf_sections[i].name);
+	// 	printf("sections[%d].type = %d\n", i,elf_sections[i].type);
+	// 	printf("sections[%d].flag = %lu\n\n",i, elf_sections[i].flag);
+	// 	i++;
+	// }
 	if (parse_elf32_symbols(elf_header, elf_shdr, elf_sections, reverse) == FALSE)
 	{
 		if (elf_sections)

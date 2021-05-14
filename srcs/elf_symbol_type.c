@@ -218,16 +218,44 @@
 	// else
 	// 	return('?');
 // }
-char 	elf_symbol_type(t_elf_symbol_part *elf_symbols, t_elf_section_part *elf_sections)
+char 	elf_symbol_type(t_elf_symbol_part elf_symbols, t_elf_section_part *elf_sections, int max)
 {
-	if (elf_symbols->bind == STB_GNU_UNIQUE)
+	if (elf_symbols.shndx > max || elf_symbols.shndx == SHN_ABS)
+		return ('A');
+	else if (elf_symbols.bind == STB_GNU_UNIQUE)
 		return ('u');
-	else if (elf_symbols->bind == STB_WEAK)
+	else if (elf_symbols.bind == STB_WEAK)
 	{
-		if (elf_symbols->shndx == SHN_UNDEF)
+		if (elf_symbols.shndx == SHN_UNDEF)
 			return ('w');
 		return ('W');
 	}
-	(void)elf_sections;
+	// elf_shdr[elf_symbols->shndx].sh_type
+	else if (elf_symbols.shndx == SHN_UNDEF)
+		return ('U');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_DYNAMIC
+		&& elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_WRITE)
+		return ('D');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_PROGBITS
+		&& elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_WRITE)
+		return ('D');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_DYNAMIC
+		&& elf_sections[elf_symbols.shndx].flag == SHF_ALLOC)
+		return ('R');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_INIT_ARRAY
+		|| elf_sections[elf_symbols.shndx].type == SHT_FINI_ARRAY)
+		{
+			if (elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_WRITE)
+				return ('T');
+		}
+	else if (elf_sections[elf_symbols.shndx].type == SHT_PROGBITS
+		&& 	elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
+			return ('T');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_PROGBITS
+		&& 	elf_sections[elf_symbols.shndx].flag == SHF_ALLOC)
+			return ('R');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_NOBITS
+		&& 	elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_WRITE)
+			return ('B');
 	return ('?');
 }
