@@ -38,5 +38,6 @@ int	parse_elf_32(char *mmap_return, char *file_offset)
 			free(elf_sections);
 		return (ft_perror("No symbol\n", 0));
 	}
+	free(elf_sections);
 	return (EXIT_SUCCESS);
 }
