@@ -4,7 +4,7 @@ CFLAGS += -Wall
 CFLAGS += -Wextra
 CFLAGS += -Werror
 CFLAGS += -g3 
-#CFLAGS += -fsanitize=address
+# CFLAGS += -fsanitize=address
 # CFLAGS += -Wpadded
 #-------------------------------------COLOR VARIABLE----------------------------#
 
