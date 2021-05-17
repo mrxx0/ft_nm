@@ -228,9 +228,10 @@ char 	elf_symbol_type(t_elf_symbol_part elf_symbols, t_elf_section_part *elf_sec
 	{
 		if (elf_symbols.shndx == SHN_UNDEF)
 			return ('w');
+		if (elf_symbols.type == STT_OBJECT)
+			return ('V');
 		return ('W');
 	}
-	// elf_shdr[elf_symbols->shndx].sh_type
 	else if (elf_symbols.shndx == SHN_UNDEF)
 		return ('U');
 	else if (elf_sections[elf_symbols.shndx].type == SHT_DYNAMIC
@@ -249,13 +250,20 @@ char 	elf_symbol_type(t_elf_symbol_part elf_symbols, t_elf_section_part *elf_sec
 				return ('T');
 		}
 	else if (elf_sections[elf_symbols.shndx].type == SHT_PROGBITS
-		&& 	elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
+		&& ((elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_EXECINSTR)
+		|| (elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_WRITE + SHF_EXECINSTR)))
 			return ('T');
 	else if (elf_sections[elf_symbols.shndx].type == SHT_PROGBITS
 		&& 	elf_sections[elf_symbols.shndx].flag == SHF_ALLOC)
 			return ('R');
+	else if (elf_sections[elf_symbols.shndx].type == SHT_NOTE)
+		return ('R');
+	else if (elf_sections[elf_symbols.shndx].flag == (SHF_ALLOC + SHF_MERGE))
+		return ('R');
 	else if (elf_sections[elf_symbols.shndx].type == SHT_NOBITS
 		&& 	elf_sections[elf_symbols.shndx].flag == SHF_ALLOC + SHF_WRITE)
 			return ('B');
+	else if (elf_symbols.type == STT_NOTYPE)
+		return ('R');
 	return ('?');
 }
