@@ -15,6 +15,10 @@ int main(int argc, char **argv)
 			return (EXIT_FAILURE);
 		if ((check_file_is_elf(mmap_return, mmap_return + stat.st_size, argv[i]) == EXIT_FAILURE))
 			return (EXIT_FAILURE);
+		if (munmap(mmap_return, stat.st_size) == FAILURE)
+			return (ft_perror("Can't munmap mmap_return\n", fd));
+		else
+			close(fd);
 		i++;
 	}
 	return (EXIT_SUCCESS);
