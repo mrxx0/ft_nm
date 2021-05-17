@@ -1,5 +1,67 @@
 #include "../includes/ft_nm.h"
 
+void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
+{
+	int i;
+
+	i = 0;
+	while (i < index)
+	{
+		if (class == 1)
+		{
+			if (elf_symbols[i].shndx == SHN_UNDEF)
+				printf("%16c", ' ');
+			else
+			printf("%016lx", elf_symbols[i].value);
+			printf(" %c", elf_symbols[i].sym_type);
+			printf(" %s\n", elf_symbols[i].name);
+		}
+		else
+		{
+			if (elf_symbols[i].shndx == SHN_UNDEF)
+			printf("%8c", ' ');
+			else
+			printf("%08lx", elf_symbols[i].value);
+			printf(" %c", elf_symbols[i].sym_type);
+			printf(" %s\n", elf_symbols[i].name);
+		}
+		i++;
+	}
+}
+
+int	mystrcmp(char *s1, char *s2)
+{
+	while (*s1 == '_')
+		s1++;
+	while (*s2 == '_')
+		s2++;
+	return (strcasecmp(s1, s2));
+}
+
+void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
+{
+	// int i = 0;
+	// int j = 0;
+	// t_elf_symbol_part tmp;
+
+	// while (i < index)
+	// {
+	// 	while (j < index)
+	// 	{
+	// 		if (mystrcmp(elf_symbols[i].name , elf_symbols[j].name ) < 0)
+	// 		{
+	// 			tmp = elf_symbols[i];
+	// 			elf_symbols[i] = elf_symbols[j];
+	// 			elf_symbols[j] = tmp;
+	// 		}
+	// 		j++;
+	// 	}
+	// 	j = 0;
+	// 	i++;
+	// }
+	print_symbol(elf_symbols, index, class);
+}
+
 int	open_file(char *file_name, int *fd, char **mmap_return,  struct stat *stat)
 {
 	*fd = open(file_name, O_RDONLY);
