@@ -15,7 +15,8 @@ int	open_file(char *file_name, int *fd, char **mmap_return,  struct stat *stat)
 	if (S_ISDIR(stat->st_mode))
 		return (ft_perror("Is a directory.\n", *fd));	
 	if ((*mmap_return = mmap(0, stat->st_size, PROT_READ, MAP_PRIVATE, *fd, 0)) == MAP_FAILED)
-		return (ft_perror("Mmap error\n", *fd));	
+		return (EXIT_FAILURE);
+		// return (ft_perror("Mmap error\n", *fd));	
 	return(EXIT_SUCCESS);
 }
 
