@@ -27,17 +27,11 @@ int			stock_elf32_symbols(Elf32_Sym *elf_sym, Elf32_Shdr *elf_shdr, Elf32_Ehdr *
 				elf_symbols[k].sym_type = elf_symbol_type(elf_symbols[k], elf_sections, (int)reverse_for_32(elf_header->e_shnum,sizeof(elf_header->e_shnum), reverse));
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
-				if (elf_symbols[k].shndx == SHN_UNDEF)
-					printf("%8c", ' ');
-				else
-					printf("%08lx", elf_symbols[k].value);
-				printf(" %c", elf_symbols[k].sym_type);
-				printf(" %s\n", elf_symbols[k].name);
-				
 				k++;
 			}
 			j++;
 	}
+	sort_symbol(elf_symbols, k, 0);
 	free(elf_symbols);
 	return (TRUE);
 }
