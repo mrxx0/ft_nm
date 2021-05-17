@@ -2,31 +2,27 @@
 
 char *ft_strndup(char *s1, size_t n)
 {
-    char *str;
-    size_t i;
+    char *ret = NULL;
+    char *tmp = NULL;
 
-    str = malloc(sizeof(char) * (n + 1));
-    if (!str)
-        return (MALLOC_FAILED);
-    i = 0;
-    while (s1[i] != '\0' && i <= n)
-    {
-        str[i] = s1[i];
-        i++;
-    }
-    str[i] = '\0';
-    return (str);
+    ret = malloc(sizeof(char *) * n + 1);
+    if (!ret)
+        return (NULL);
+    tmp = ret;
+    while((*ret++ = *s1++) && n--);
+    *ret = '\0';
+    return (tmp);
 }
 
 void    print_ar(char *name)
 {
-    ft_putstr("\n");
+    printf("\n");
     while (*name != '/')
     {
-        ft_putchar(*name);
+        printf("%c", *name);
         name++;
     }
-    ft_putstr(":\n");
+    printf(":\n");
 }
 
 char *get_name(char **str_tab)
