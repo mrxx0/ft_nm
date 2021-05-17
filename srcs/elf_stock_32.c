@@ -28,20 +28,17 @@ int			stock_elf32_symbols(Elf32_Sym *elf_sym, Elf32_Shdr *elf_shdr, Elf32_Ehdr *
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
 				if (elf_symbols[k].shndx == SHN_UNDEF)
-					ft_printf("%8c", ' ');
+					printf("%8c", ' ');
 				else
-					ft_printf("%08x", elf_symbols[k].value);
-				ft_printf(" %c", elf_symbols[k].sym_type);
-				ft_printf(" %s\n", elf_symbols[k].name);
+					printf("%08lx", elf_symbols[k].value);
+				printf(" %c", elf_symbols[k].sym_type);
+				printf(" %s\n", elf_symbols[k].name);
 				
 				k++;
 			}
 			j++;
 	}
-
-	// DEBUG TEMP
-	if (elf_symbols)
-		free(elf_symbols);
+	free(elf_symbols);
 	return (TRUE);
 }
 
