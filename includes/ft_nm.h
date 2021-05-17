@@ -27,6 +27,7 @@ typedef struct	s_elf_section_part
 {
 	char 		*name;
 	uint32_t	type;
+	char		pad[4];
 	uint64_t	flag;
 }		t_elf_section_part;
 
@@ -36,6 +37,7 @@ typedef struct	s_elf_symbol_part
 	char		sym_type;
 	uint8_t		type;
 	uint8_t		bind;
+	char		pad[3];
 	uint16_t	shndx;
 	uint64_t	value;
 }		t_elf_symbol_part;
@@ -56,15 +58,9 @@ t_elf_section_part		*stock_elf64_sections(uint16_t e_shnum, Elf64_Shdr *shdr, ch
 t_elf_section_part		*stock_elf32_sections(uint16_t e_shnum, Elf32_Shdr *shdr, char *strtable, _Bool reverse);
 _Bool				parse_elf64_symbols(Elf64_Ehdr *elf_header, Elf64_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
 _Bool				parse_elf32_symbols(Elf32_Ehdr *elf_header, Elf32_Shdr *elf_shdr, t_elf_section_part *elf_sections, _Bool reverse);
-// char    			elf_symbol_type_64(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
-// char    			elf_symbol_type_32(t_elf_symbol_part *elf_symbols, Elf32_Shdr *elf_shdr, Elf32_Sym *elf_sym, t_elf_section_part *elf_sections);
-// char 				elf_symbol_type(t_elf_symbol_part *elf_symbols, t_elf_section_part *elf_sections);
-// char    elf_symbol_type_32(t_elf_symbol_part *elf_symbols, Elf32_Shdr *elf_shdr, Elf32_Sym *elf_sym, t_elf_section_part *elf_sections);
-// char    elf_symbol_type_64(t_elf_symbol_part *elf_symbols, Elf64_Shdr *elf_shdr, Elf64_Sym *elf_sym, t_elf_section_part *elf_sections);
 char    elf_symbol_type(t_elf_symbol_part elf_symbols, t_elf_section_part *elf_sections, int max);
-
-
 int 				validate_elf_type(char *mmap_return, char *file_offset);
+void 				sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class);
 
 
 #endif 
