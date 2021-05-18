@@ -31,34 +31,50 @@ void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 
 int	mystrcmp(char *s1, char *s2)
 {
-	while (*s1 == '_')
+	int res = 0;
+
+	while (*s1 == '_' || *s1 == '.' || *s1 == '@')
 		s1++;
-	while (*s2 == '_')
+	while (*s2 == '_' || *s2 == '.' || *s2 == '@')
 		s2++;
-	return (strcasecmp(s1, s2));
+	if (*s1 == *s2)
+		return (0);
+	while (res == 0)
+	{
+		if (*s1 == '\0')
+			break;
+		while (*s1 == '_' || *s1 == '@' || *s1 == '.')
+			s1++;
+		while (*s2 == '_' || *s2 == '@' || *s2 == '.')
+			s2++;
+		res = ft_tolower(*s1) - ft_tolower(*s2);
+		s1++;
+		s2++;
+	}
+	return (res);
 }
 
 void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 {
-	// int i = 0;
-	// int j = 0;
-	// t_elf_symbol_part tmp;
+	int i = 0;
+	int j = 0;
+	t_elf_symbol_part tmp;
 
-	// while (i < index)
-	// {
-	// 	while (j < index)
-	// 	{
-	// 		if (mystrcmp(elf_symbols[i].name , elf_symbols[j].name ) < 0)
-	// 		{
-	// 			tmp = elf_symbols[i];
-	// 			elf_symbols[i] = elf_symbols[j];
-	// 			elf_symbols[j] = tmp;
-	// 		}
-	// 		j++;
-	// 	}
-	// 	j = 0;
-	// 	i++;
-	// }
+	while (i + 1 < index)
+	{
+		while (j < index)
+		{
+			if (mystrcmp(elf_symbols[i].name , elf_symbols[j].name ) < 0)
+			{
+				tmp = elf_symbols[i];
+				elf_symbols[i] = elf_symbols[j];
+				elf_symbols[j] = tmp;
+			}
+			j++;
+		}
+		i++;
+		j = 0;
+	}
 	print_symbol(elf_symbols, index, class);
 }
 

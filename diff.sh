@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 ./ft_nm $1 > ft_nm.txt
-nm -p $1 > nm.txt
+nm $1 > nm.txt
 
 
 DIFF=$(diff -y --suppress-common-lines ft_nm.txt nm.txt)
