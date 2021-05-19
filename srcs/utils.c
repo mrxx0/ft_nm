@@ -29,28 +29,60 @@ void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 	}
 }
 
+char *transform_str(char *str)
+{
+	char *ret;
+
+	int i;
+	int j;
+	int count;
+
+	i = 0;
+	j = 0;
+	count = 0;
+	while (str[i])
+	{
+		if (ft_isalnum(str[i]))
+			count++;
+		i++;
+	}
+	ret = ft_strnew(count);
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isalnum(str[i]))
+		{
+			ret[j] = str[i];
+			j++;
+		}
+		i++;
+	}
+	ret[j] = '\0';
+	return (ret);
+}
+
 int	mystrcmp(char *s1, char *s2)
 {
 	int res = 0;
+	int i = 0;
+	int j = 0;
+	char *str1;
+	char *str2;
 
-	while (*s1 == '_' || *s1 == '.' || *s1 == '@')
-		s1++;
-	while (*s2 == '_' || *s2 == '.' || *s2 == '@')
-		s2++;
-	if (*s1 == *s2)
-		return (0);
-	while (res == 0)
+	str1 = transform_str(s1);
+	str2 = transform_str(s2);
+
+	// printf("s1 = [%s]\tstr1 = [%s]\n", s1, str1);
+	// printf("s2 = [%s]\tstr2 = [%s]\n\n", s2, str2);
+	while (str1[i] != '\0' && ft_tolower(str1[i]) == ft_tolower(str2[j]))
 	{
-		if (*s1 == '\0')
-			break;
-		while (*s1 == '_' || *s1 == '@' || *s1 == '.')
-			s1++;
-		while (*s2 == '_' || *s2 == '@' || *s2 == '.')
-			s2++;
-		res = ft_tolower(*s1) - ft_tolower(*s2);
-		s1++;
-		s2++;
+		i++;
+		j++;
 	}
+	res = ft_tolower(str1[i]) - ft_tolower(str2[j]);
+	// if res == 0 calcul adresse;
+	free(str1);
+	free(str2);
 	return (res);
 }
 
@@ -58,22 +90,34 @@ void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 {
 	int i = 0;
 	int j = 0;
+	int swap = 0;
 	t_elf_symbol_part tmp;
 
-	while (i + 1 < index)
-	{
-		while (j < index)
+	while (i + 1 <= index)
+	{			
+		j = i;
+		while (j + 1 <= index)
 		{
-			if (mystrcmp(elf_symbols[i].name , elf_symbols[j].name ) < 0)
+			swap = mystrcmp(elf_symbols[i].name , elf_symbols[j].name);
+			if (swap > 0)
 			{
-				tmp = elf_symbols[i];
-				elf_symbols[i] = elf_symbols[j];
-				elf_symbols[j] = tmp;
+				tmp = elf_symbols[j];
+				elf_symbols[j] = elf_symbols[i];
+				elf_symbols[i] = tmp;
+			}
+			else if (swap == 0)
+			{
+				if (elf_symbols[i].value > elf_symbols[j].value)
+				{
+					// printf("value i = [%lu] | value j = [%lu]\n", elf_symbols[i].value, elf_symbols[j].value);
+					tmp = elf_symbols[j];
+					elf_symbols[j] = elf_symbols[i];
+					elf_symbols[i] = tmp;
+				}
 			}
 			j++;
 		}
 		i++;
-		j = 0;
 	}
 	print_symbol(elf_symbols, index, class);
 }
