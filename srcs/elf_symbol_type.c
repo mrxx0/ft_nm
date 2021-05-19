@@ -222,6 +222,8 @@ char 	elf_symbol_type(t_elf_symbol_part elf_symbols, t_elf_section_part *elf_sec
 {
 	if (elf_symbols.shndx > max || elf_symbols.shndx == SHN_ABS)
 		return ('A');
+	else if (elf_symbols.shndx == SHN_COMMON)
+		return ('C');
 	else if (elf_symbols.bind == STB_GNU_UNIQUE)
 		return ('u');
 	else if (elf_symbols.bind == STB_WEAK)
