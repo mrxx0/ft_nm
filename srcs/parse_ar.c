@@ -106,10 +106,10 @@ int	parse_ar(char *mmap_return, char *file_offset, char *file_name)
         len = 0;
         name = NULL;
         ar = (struct ar_hdr*)mmap_return;
-        while (ar->ar_name[len] != '/')
-            len++;
         if (validate_elf_type(mmap_return + sizeof(*ar), file_offset) == 0)
             return (ft_perror("File format not recognized\n", 0));
+        while (ar->ar_name[len] != '/')
+            len++;
         if (len == 0)
         {   
             if (!(name = get_name(&str_tab)))
