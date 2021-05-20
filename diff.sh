@@ -4,15 +4,16 @@
 nm $1 > nm.txt
 
 
-DIFF=$(diff -y --suppress-common-lines ft_nm.txt nm.txt)
+DIFF=$(diff -ya --suppress-common-lines ft_nm.txt nm.txt)
 
 if [ "$DIFF" != "" ]
 then
-	echo $1
-	echo "Diff START"
+echo -e "\e[31mFailed on $1\e[0m"
+	# echo "Failed on $1 :"
 	echo $DIFF
-	echo "Diff END"
-	echo -e "\n"
+else
+	echo -e "\e[32mOK on $1\e[0m"
 fi
+echo ""
 rm -r ft_nm.txt nm.txt
 
