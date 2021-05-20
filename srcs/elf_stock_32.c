@@ -25,6 +25,7 @@ int			stock_elf32_symbols(Elf32_Sym *elf_sym, Elf32_Shdr *elf_shdr, Elf32_Ehdr *
 				elf_symbols[k].shndx = (uint16_t)reverse_for_32(elf_sym[j].st_shndx,sizeof(elf_sym[j].st_shndx), reverse);
 				elf_symbols[k].name = elf_symstrtable + reverse_for_32(elf_sym[j].st_name,sizeof(elf_sym[j].st_name), reverse);
 				elf_symbols[k].sym_type = elf_symbol_type(elf_symbols[k], elf_sections, (int)reverse_for_32(elf_header->e_shnum,sizeof(elf_header->e_shnum), reverse));
+				elf_symbols[k].hash = hash(elf_symbols[k].name);				
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
 				k++;

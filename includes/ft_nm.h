@@ -34,11 +34,13 @@ typedef struct	s_elf_section_part
 typedef struct	s_elf_symbol_part
 {
 	char 		*name;
+	int 		hash;
+	char		pad;
 	char		sym_type;
 	uint8_t		type;
 	uint8_t		bind;
-	char		pad[3];
 	uint16_t	shndx;
+	char		padd[6];
 	uint64_t	value;
 }		t_elf_symbol_part;
 

@@ -4,8 +4,8 @@ void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 {
 	int i;
 
-	i = 0;
-	while (i < index)
+	i = index - 1;
+	while (i >= 0)
 	{
 		if (class == 1)
 		{
@@ -25,8 +25,23 @@ void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 			printf(" %c", elf_symbols[i].sym_type);
 			printf(" %s\n", elf_symbols[i].name);
 		}
+		i--;
+	}
+}
+
+int count_char_to_skip(char *str)
+{
+	int i;
+	int count;
+
+	i = 0;
+	count = 0;
+	while (str[i] && !ft_isalnum(str[i]))
+	{
+		count++;
 		i++;
 	}
+	return (count);
 }
 
 char *transform_str(char *str)
@@ -46,8 +61,8 @@ char *transform_str(char *str)
 			count++;
 		i++;
 	}
-	ret = ft_strnew(count);
 	i = 0;
+	ret = ft_strnew(count + 1);
 	while (str[i])
 	{
 		if (ft_isalnum(str[i]))
@@ -68,19 +83,16 @@ int	mystrcmp(char *s1, char *s2)
 	int j = 0;
 	char *str1;
 	char *str2;
-
+	
 	str1 = transform_str(s1);
 	str2 = transform_str(s2);
-
-	// printf("s1 = [%s]\tstr1 = [%s]\n", s1, str1);
-	// printf("s2 = [%s]\tstr2 = [%s]\n\n", s2, str2);
+	
 	while (str1[i] != '\0' && ft_tolower(str1[i]) == ft_tolower(str2[j]))
 	{
 		i++;
 		j++;
 	}
 	res = ft_tolower(str1[i]) - ft_tolower(str2[j]);
-	// if res == 0 calcul adresse;
 	free(str1);
 	free(str2);
 	return (res);
@@ -99,26 +111,43 @@ void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 		while (j + 1 <= index)
 		{
 			swap = mystrcmp(elf_symbols[i].name , elf_symbols[j].name);
-			if (swap > 0)
+			if (swap < 0)
 			{
+				// printf("[%s]\n[%s]\n\n", elf_symbols[i].name, elf_symbols[j].name);
 				tmp = elf_symbols[j];
 				elf_symbols[j] = elf_symbols[i];
 				elf_symbols[i] = tmp;
 			}
 			else if (swap == 0)
 			{
-				if (elf_symbols[i].value > elf_symbols[j].value)
+
+				if (elf_symbols[i].value < elf_symbols[j].value)
 				{
-					// printf("value i = [%lu] | value j = [%lu]\n", elf_symbols[i].value, elf_symbols[j].value);
+					tmp = elf_symbols[j];
+					elf_symbols[j] = elf_symbols[i];
+					elf_symbols[i] = tmp;
+				}
+				// else if (count_char_to_skip(elf_symbols[i].name) > count_char_to_skip(elf_symbols[j].name))
+				else if (count_char_to_skip(elf_symbols[i].name) < count_char_to_skip(elf_symbols[j].name))
+				{
+					// printf("swapping %s with %s\n", elf_symbols[i].name, elf_symbols[j].name);
 					tmp = elf_symbols[j];
 					elf_symbols[j] = elf_symbols[i];
 					elf_symbols[i] = tmp;
 				}
 			}
+			// 	// else if (ft_tolower(elf_symbols[i].sym_type) < ft_tolower(elf_symbols[j].sym_type))
+			// 	// {
+			// 	// 	tmp = elf_symbols[j];
+			// 	// 	elf_symbols[j] = elf_symbols[i];
+			// 	// 	elf_symbols[i] = tmp;
+			// 	// }
+			// }
 			j++;
 		}
 		i++;
 	}
+	// (void)class;
 	print_symbol(elf_symbols, index, class);
 }
 
