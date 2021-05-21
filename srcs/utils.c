@@ -44,6 +44,17 @@ int count_char_to_skip(char *str)
 	return (count);
 }
 
+int hash (char *str)
+{
+	int hash;
+	int c;
+
+	hash = 0;
+	while ((c = *str++))
+		hash = c + (hash << 1);
+	return (hash);
+}
+
 char *transform_str(char *str)
 {
 	char *ret;
@@ -76,25 +87,48 @@ char *transform_str(char *str)
 	return (ret);
 }
 
-int	mystrcmp(char *s1, char *s2)
+int	mystrcmp(char *s1, char *s2, t_elf_symbol_part *syms1, t_elf_symbol_part *syms2)
 {
 	int res = 0;
-	int i = 0;
-	int j = 0;
-	char *str1;
-	char *str2;
+	size_t i = 0;
+	size_t j = 0;
+	_Bool priority = 0;
+
+	(void)syms1;
+	(void)syms2;
 	
-	str1 = transform_str(s1);
-	str2 = transform_str(s2);
-	
-	while (str1[i] != '\0' && ft_tolower(str1[i]) == ft_tolower(str2[j]))
-	{
+	while (s1[i] == '_' || s1[i] == '.')
 		i++;
+	while (s2[j] == '_' || s2[j] == '.')
 		j++;
+	if (j > i && syms2->shndx != SHN_UNDEF)
+		priority = 1;
+	while (s1[i])
+	{
+		if (ft_tolower(s1[i]) == ft_tolower(s2[j]))
+		{
+			i++;
+			j++;
+		}
+		else if ((s1[i] == '_' || s1[i] == '@' || s1[i] == '.')  
+			|| (s2[j] == '_' || s2[j] == '@' || s2[j] == '.'))
+		{
+			if (s1[i] == '_' || s1[i] == '@' || s1[i] == '.')
+				i++;
+			if (s2[j] == '_' || s2[j] == '@' || s2[j] == '.')
+				j++;
+		}
+		else
+			break ;
 	}
-	res = ft_tolower(str1[i]) - ft_tolower(str2[j]);
-	free(str1);
-	free(str2);
+	res = ft_tolower(s1[i]) - ft_tolower(s2[j]);
+	if (res == 0)
+	{
+		if (priority == 1)
+			return (1);
+		else
+			return (-1);
+	}
 	return (res);
 }
 
@@ -110,39 +144,22 @@ void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 		j = i;
 		while (j + 1 <= index)
 		{
-			swap = mystrcmp(elf_symbols[i].name , elf_symbols[j].name);
+			swap = mystrcmp(elf_symbols[i].name , elf_symbols[j].name, &elf_symbols[i], &elf_symbols[j]);
 			if (swap < 0)
 			{
-				// printf("[%s]\n[%s]\n\n", elf_symbols[i].name, elf_symbols[j].name);
 				tmp = elf_symbols[j];
 				elf_symbols[j] = elf_symbols[i];
 				elf_symbols[i] = tmp;
 			}
 			else if (swap == 0)
 			{
-
 				if (elf_symbols[i].value < elf_symbols[j].value)
 				{
 					tmp = elf_symbols[j];
 					elf_symbols[j] = elf_symbols[i];
 					elf_symbols[i] = tmp;
 				}
-				// else if (count_char_to_skip(elf_symbols[i].name) > count_char_to_skip(elf_symbols[j].name))
-				else if (count_char_to_skip(elf_symbols[i].name) < count_char_to_skip(elf_symbols[j].name))
-				{
-					// printf("swapping %s with %s\n", elf_symbols[i].name, elf_symbols[j].name);
-					tmp = elf_symbols[j];
-					elf_symbols[j] = elf_symbols[i];
-					elf_symbols[i] = tmp;
-				}
 			}
-			// 	// else if (ft_tolower(elf_symbols[i].sym_type) < ft_tolower(elf_symbols[j].sym_type))
-			// 	// {
-			// 	// 	tmp = elf_symbols[j];
-			// 	// 	elf_symbols[j] = elf_symbols[i];
-			// 	// 	elf_symbols[i] = tmp;
-			// 	// }
-			// }
 			j++;
 		}
 		i++;

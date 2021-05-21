@@ -40,6 +40,8 @@ typedef struct	s_elf_symbol_part
 	char		sym_type;
 	char		pad[3];
 	uint64_t	value;
+	int			hash;
+	char		padd[4];
 }		t_elf_symbol_part;
 
 int				ft_perror(char *error_message, int fd);
@@ -61,6 +63,7 @@ _Bool				parse_elf32_symbols(Elf32_Ehdr *elf_header, Elf32_Shdr *elf_shdr, t_elf
 char    elf_symbol_type(t_elf_symbol_part elf_symbols, t_elf_section_part *elf_sections, int max);
 int 				validate_elf_type(char *mmap_return, char *file_offset);
 void 				sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class);
+int 				hash (char *str);
 
 
 #endif 

@@ -24,6 +24,7 @@ int			stock_elf64_symbols(Elf64_Sym *elf_sym, Elf64_Shdr *elf_shdr, Elf64_Ehdr *
 				elf_symbols[k].bind = (uint8_t)ELF64_ST_BIND(reverse_for_64(elf_sym[j].st_info, sizeof(elf_sym[j].st_info), reverse));
 				elf_symbols[k].shndx = (uint16_t)reverse_for_64(elf_sym[j].st_shndx, sizeof(elf_sym[j].st_shndx), reverse);
 				elf_symbols[k].name = elf_symstrtable + reverse_for_64(elf_sym[j].st_name, sizeof(elf_sym[j].st_name), reverse);
+				elf_symbols[k].hash = hash(elf_symbols[k].name);
 				elf_symbols[k].sym_type = elf_symbol_type(elf_symbols[k], elf_sections, (int)reverse_for_64(elf_header->e_shnum,sizeof(elf_header->e_shnum), reverse));
 				if (elf_symbols[k].bind == STB_LOCAL && elf_symbols[k].sym_type != '?')
 					elf_symbols[k].sym_type += 32;
