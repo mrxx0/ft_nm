@@ -4,8 +4,8 @@ void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 {
 	int i;
 
-	i = index - 1;
-	while (i >= 0)
+	i = 0;
+	while (i < index)
 	{
 		if (class == 1)
 		{
@@ -25,7 +25,7 @@ void print_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 			printf(" %c", elf_symbols[i].sym_type);
 			printf(" %s\n", elf_symbols[i].name);
 		}
-		i--;
+		i++;
 	}
 }
 
@@ -101,7 +101,7 @@ int	mystrcmp(char *s1, char *s2, t_elf_symbol_part *syms1, t_elf_symbol_part *sy
 		i++;
 	while (s2[j] == '_' || s2[j] == '.')
 		j++;
-	if (j > i && syms2->shndx != SHN_UNDEF)
+	if (i < j)
 		priority = 1;
 	while (s1[i])
 	{
@@ -122,14 +122,22 @@ int	mystrcmp(char *s1, char *s2, t_elf_symbol_part *syms1, t_elf_symbol_part *sy
 			break ;
 	}
 	res = ft_tolower(s1[i]) - ft_tolower(s2[j]);
-	if (res == 0)
+	if (res == 0 && s1[i] != '\0' && s2[j] != '\0')
 	{
-		if (priority == 1)
+		if (priority == 1 && syms1->shndx != SHN_UNDEF)
 			return (1);
-		else
-			return (-1);
 	}
 	return (res);
+}
+
+int ft_cmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2 && *(uint8_t*)s1 == *(uint8_t*)s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*(uint8_t*)s1 - *(uint8_t*)s2);
 }
 
 void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
@@ -145,26 +153,21 @@ void sort_symbol(t_elf_symbol_part *elf_symbols, int index, _Bool class)
 		while (j + 1 <= index)
 		{
 			swap = mystrcmp(elf_symbols[i].name , elf_symbols[j].name, &elf_symbols[i], &elf_symbols[j]);
-			if (swap < 0)
+			
+			if (swap > 0 || (swap == 0 && elf_symbols[i].value > elf_symbols[j].value))
 			{
-				tmp = elf_symbols[j];
-				elf_symbols[j] = elf_symbols[i];
-				elf_symbols[i] = tmp;
-			}
-			else if (swap == 0)
-			{
-				if (elf_symbols[i].value < elf_symbols[j].value)
-				{
-					tmp = elf_symbols[j];
-					elf_symbols[j] = elf_symbols[i];
-					elf_symbols[i] = tmp;
-				}
+				// if (swap > 0)
+				// 	{
+				// 		printf("%s %lu\n%s %lu\n\n", elf_symbols[i].name, elf_symbols[i].value,elf_symbols[j].name, elf_symbols[j].value);
+				// 	}
+				tmp = elf_symbols[i];
+				elf_symbols[i] = elf_symbols[j];
+				elf_symbols[j] = tmp;
 			}
 			j++;
 		}
 		i++;
 	}
-	// (void)class;
 	print_symbol(elf_symbols, index, class);
 }
 
