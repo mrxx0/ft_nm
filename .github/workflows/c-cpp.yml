@@ -16,4 +16,4 @@ jobs:
     - name: Make
       run: make
     - name: Diff
-      run: for f in testbench/* ; do bash diff.sh $f ; done ;
+      run: for f in testbench/* ; do ./diff.sh $f ; done ;
