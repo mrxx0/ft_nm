@@ -23,6 +23,9 @@
 
 #define MALLOC_FAILED NULL
 
+#define EHSIZE_MAX32 52
+#define EHSIZE_MAX64 64
+
 typedef struct	s_elf_section_part
 {
 	char 		*name;
