@@ -18,7 +18,7 @@ int	parse_elf_64(char *mmap_return, char *file_offset)
 	system_endian = get_endian_system();
 	reverse = need_to_reverse(file_endian, system_endian);
 	if (reverse_for_64(elf_header->e_ehsize, sizeof(elf_header->e_ehsize), reverse) != EHSIZE_MAX64)
-		return (ft_perror("File truncated\n", 0));
+		return (ft_perror("File format not recognized\n", 0));
 	if (mmap_return + reverse_for_64(elf_header->e_shoff, sizeof(elf_header->e_shoff), reverse) > file_offset)
 		return (ft_perror("File corrupted\n", 0));
 	if (reverse_for_64(elf_header->e_phnum, sizeof(elf_header->e_phnum), reverse) >= PN_XNUM)

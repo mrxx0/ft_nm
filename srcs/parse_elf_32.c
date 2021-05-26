@@ -18,13 +18,11 @@ int	parse_elf_32(char *mmap_return, char *file_offset)
 	system_endian = get_endian_system();
 	reverse = need_to_reverse(file_endian, system_endian);
 	if (reverse_for_32(elf_header->e_ehsize, sizeof(elf_header->e_ehsize), reverse) != EHSIZE_MAX32)
-		return (ft_perror("File truncated\n", 0));
+		return (ft_perror("File format not recognized\n", 0));
 	if (mmap_return + reverse_for_32(elf_header->e_shoff, sizeof(elf_header->e_shoff), reverse) > file_offset)
 		return (ft_perror("File corrupted\n", 0));
 	if (reverse_for_32(elf_header->e_phnum, sizeof(elf_header->e_phnum), reverse) >= PN_XNUM)
 		return (ft_perror("Bad value\n", 0));
-	if (mmap_return + reverse_for_32(elf_header->e_shoff, sizeof(elf_header->e_shoff), reverse) > file_offset)
-		return (ft_perror("File corrupted\n", 0));
 	elf_shdr = (Elf32_Shdr *)(mmap_return + (uint32_t)reverse_for_32(elf_header->e_shoff, sizeof(elf_header->e_shoff), reverse));
 	if (reverse_for_32(elf_header->e_shstrndx, sizeof(elf_header->e_shstrndx), reverse) >= SHN_LORESERVE )
 		return (ft_perror("No symbols\n", 0));
